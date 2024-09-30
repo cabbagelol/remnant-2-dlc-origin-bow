@@ -8,14 +8,16 @@ const nowIntegralPointTime = new Date().getHours(),
     inputMax = 4;
 
 let inputValueBox = ref(null),
-    inputValue = [9, 9, 4, 2],
-    outputValue = ref([0, 0, 0, 0])
-
-onCalc()
+    inputValue = [9, 9, getRandom(), getRandom()],
+    outputValue = ref([1, 6, 0, 0])
 
 onMounted(() => {
-
+  onCalc()
 })
+
+function getRandom() {
+  return Math.floor(Math.random() * 9) + 1;
+}
 
 function onRouletteChange(value) {
   for (let index = 0; index < inputMax; index++) {
@@ -28,9 +30,8 @@ function onRouletteChange(value) {
 function onCalc() {
   let input = inputValue.join('');
 
-  let resultNumber = (Number(input) + b(0)).toString();
+  let resultNumber = (Number(input) + b(nowIntegralPointTime)).toString();
 
-  console.log(resultNumber.length)
   if (resultNumber.length === 5)
     resultNumber = resultNumber.slice(1, 5);
 
@@ -40,17 +41,11 @@ function onCalc() {
 function b(nowIntegralPointTime) {
   let disT = null
   Object.entries(dis.t).forEach((i) => {
-    console.log(i[0], i[1], nowIntegralPointTime)
     if (i[1].indexOf(nowIntegralPointTime) >= 0)
       disT = i[0]
   })
 
   return Number(dis.d[disT]);
-}
-
-function on() {
-  var i = ref('v-1').value;
-  console.log(i, o);
 }
 </script>
 
@@ -82,11 +77,24 @@ function on() {
   <hr/>
 
   <footer>
-    破译方式作者: <a href="https://www.bilibili.com/video/BV1gfx2egETJ">苏九川来了</a> , 程序作者: <a href="http://cabbagelol.net">cabbagelol</a>
+    破译方式作者: <a href="https://www.bilibili.com/video/BV1gfx2egETJ">苏九川来了</a> , 程序作者: <a
+      href="http://cabbagelol.net">cabbagelol</a>
   </footer>
 </template>
 
-<style scoped>
+<style>
+html, body {
+  background: #252525;
+  text-align: center;
+}
+
+hr {
+  outline: none !important;
+  border: none;
+  height: 2px;
+  background: #000;
+}
+
 .roulette-input-box {
   display: flex;
 }
