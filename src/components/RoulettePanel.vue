@@ -25,7 +25,7 @@ async function loaddata() {
 }
 
 function add() {
-  if (n_value.value >= 8) return;
+  if (n_value.value >= 9) return;
   n_value.value += 1;
   $emit('change', n_value.value)
 }
