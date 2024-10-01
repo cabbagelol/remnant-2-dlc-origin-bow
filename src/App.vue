@@ -7,8 +7,11 @@ import {onMounted, ref} from "vue";
 const nowIntegralPointTime = new Date().getHours(),
     inputMax = 4;
 
-let inputValueBox = ref(null),
+let useSystemNowIntegralPointTime = ref(true),
+    customIntegralPointTime = ref(new Date()),
+    inputValueBox = ref(null),
     inputValue = [9, 9, getRandom(), getRandom()],
+    resultNumber = ref('0000'),
     outputValue = ref([1, 6, 0, 0])
 
 onMounted(() => {
@@ -28,14 +31,17 @@ function onRouletteChange(value) {
 }
 
 function onCalc() {
-  let input = inputValue.join('');
+  let input = inputValue.join(''),
+      time = useSystemNowIntegralPointTime.value ? nowIntegralPointTime : customIntegralPointTime.value.getHours();
 
-  let resultNumber = (Number(input) + b(nowIntegralPointTime)).toString();
+  resultNumber.value = (Number(input) + b(time)).toString();
 
-  if (resultNumber.length === 5)
-    resultNumber = resultNumber.slice(1, 5);
+  if (resultNumber.value.length === 3)
+    resultNumber.value = `0${resultNumber.value}`
+  else if (resultNumber.value.length === 5)
+    resultNumber.value = resultNumber.value.slice(1, 5);
 
-  outputValue.value = resultNumber.toString().split('')
+  outputValue.value = resultNumber.value.toString().split('')
 }
 
 function b(nowIntegralPointTime) {
@@ -51,6 +57,20 @@ function b(nowIntegralPointTime) {
 
 <template>
   <main>
+    <div class="tool">
+      <label>
+        <input type="checkbox" v-model="useSystemNowIntegralPointTime"/>使用系统时间
+        <template v-if="useSystemNowIntegralPointTime">
+          {{nowIntegralPointTime}}:00
+        </template>
+        <template v-else>
+          <input type="time" class="custom-time-input" v-model="customIntegralPointTime" v-if="!useSystemNowIntegralPointTime"/>
+        </template>
+      </label>
+    </div>
+
+    <br/>
+
     <div class="roulette-input-box">
       <RoulettePanel
           v-for="i in inputMax"
@@ -72,6 +92,13 @@ function b(nowIntegralPointTime) {
         {{ i }}
       </RoulettePanel>
     </div>
+
+    <br/>
+
+    <div>
+      注意事项:<br/>
+      1. 请以主机玩家来破译<br/>
+    </div>
   </main>
 
   <hr/>
@@ -85,7 +112,6 @@ function b(nowIntegralPointTime) {
 <style>
 html, body {
   background: #252525;
-  text-align: center;
 }
 
 hr {
@@ -97,5 +123,30 @@ hr {
 
 .roulette-input-box {
   display: flex;
+}
+
+.custom-time-input::-webkit-calendar-picker-indicator {
+  display: none;
+  outline: none;
+}
+
+.custom-time-input {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  font-size: initial;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.custom-time-input::before {
+  content: attr(value);
+}
+
+.custom-time-input:focus::before {
+  outline: none;
 }
 </style>

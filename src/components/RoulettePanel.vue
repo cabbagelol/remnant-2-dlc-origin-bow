@@ -40,11 +40,13 @@ defineExpose({value})
 </script>
 
 <template>
-  <div class="roulette-col">
-    <button @click="rem" v-if="props.type === 'write'">-</button>
-    <img :src="numberAsImage[value]" alt=""/>
-    <button @click="add" v-if="props.type === 'write'">+</button>
-<!--    <input v-model="value" :readonly="props.type === 'read'"/>-->
+  <div>
+    <div class="roulette-col" :class="props.type !== 'write' ? 'y':'n'">
+      <button @click="rem" :disabled="props.type !== 'write'" >-</button>
+      <img :src="numberAsImage[value]" :alt="value" :title="value"/>
+      <button @click="add" :disabled="props.type !== 'write'">+</button>
+    </div>
+    <div class="roulette-text">{{ value }}</div>
   </div>
 </template>
 
@@ -55,7 +57,24 @@ defineExpose({value})
   margin: 0 5px;
   border-radius: 5px;
   overflow: hidden;
+}
+
+.roulette-col.n {
   background: #000;
+}
+
+.roulette-col.y button {
+  visibility: hidden;
+}
+
+.roulette-text {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: 4px;
+  margin: 3px auto;
+  width: 20px;
+  color: #f2f2f2;
+  font-size: 12px;
 }
 
 .roulette-col img {
