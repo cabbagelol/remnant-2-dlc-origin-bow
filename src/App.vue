@@ -75,7 +75,7 @@ function b(nowIntegralPointTime) {
 
 <template>
   <main>
-    <div class="tool">
+    <div class="tool" style="display: none">
       <label>
         <input type="checkbox" v-model="useSystemNowIntegralPointTime"/>使用系统时间
         <template v-if="useSystemNowIntegralPointTime">
