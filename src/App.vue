@@ -11,39 +11,57 @@ let useSystemNowIntegralPointTime = ref(true),
     customIntegralPointTime = ref(new Date()),
     inputValueBox = ref(null),
     inputValue = [9, 9, getRandom(), getRandom()],
-    resultNumber = ref('0000'),
+    resultNumber = ref('1600'),
     outputValue = ref([1, 6, 0, 0])
 
 onMounted(() => {
   onCalc()
 })
 
+/**
+ * 随机创建初始
+ * @returns {number}
+ */
 function getRandom() {
   return Math.floor(Math.random() * 9) + 1;
 }
 
+/**
+ * 轮盘触发时间通知计算
+ * @param value
+ */
 function onRouletteChange(value) {
   for (let index = 0; index < inputMax; index++) {
     inputValue[index] = inputValueBox.value[index].value
   }
-
   onCalc();
 }
 
+/**
+ * 计算
+ */
 function onCalc() {
   let input = inputValue.join(''),
       time = useSystemNowIntegralPointTime.value ? nowIntegralPointTime : customIntegralPointTime.value.getHours();
 
+  // 相加
   resultNumber.value = (Number(input) + b(time)).toString();
 
+  // 补全与舍值
   if (resultNumber.value.length === 3)
     resultNumber.value = `0${resultNumber.value}`
   else if (resultNumber.value.length === 5)
     resultNumber.value = resultNumber.value.slice(1, 5);
 
+  // 字符转数组
   outputValue.value = resultNumber.value.toString().split('')
 }
 
+/**
+ * 字典中区对应时间内密码偏移值
+ * @param nowIntegralPointTime
+ * @returns {number}
+ */
 function b(nowIntegralPointTime) {
   let disT = null
   Object.entries(dis.t).forEach((i) => {
@@ -61,10 +79,11 @@ function b(nowIntegralPointTime) {
       <label>
         <input type="checkbox" v-model="useSystemNowIntegralPointTime"/>使用系统时间
         <template v-if="useSystemNowIntegralPointTime">
-          {{nowIntegralPointTime}}:00
+          {{ nowIntegralPointTime }}:00
         </template>
         <template v-else>
-          <input type="time" class="custom-time-input" v-model="customIntegralPointTime" v-if="!useSystemNowIntegralPointTime"/>
+          <input type="time" class="custom-time-input" v-model="customIntegralPointTime"
+                 v-if="!useSystemNowIntegralPointTime"/>
         </template>
       </label>
     </div>
@@ -81,8 +100,6 @@ function b(nowIntegralPointTime) {
           @change="onRouletteChange">
       </RoulettePanel>
     </div>
-
-    <br/>
 
     <div class="roulette-input-box">
       <RoulettePanel v-for="i in outputValue"
@@ -123,6 +140,7 @@ hr {
 
 .roulette-input-box {
   display: flex;
+  margin: 0 0 10px 0;
 }
 
 .custom-time-input::-webkit-calendar-picker-indicator {
