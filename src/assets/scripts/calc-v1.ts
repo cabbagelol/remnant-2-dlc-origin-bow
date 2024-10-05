@@ -31,8 +31,8 @@ export class V1 implements BaseCalcModel {
     /**
      * 计算
      */
-    public getExportation(inputValue: any): string[] {
-        let input = inputValue.join('') && inputValue.value.join(''),
+    public getExportation(inputValue: number[] = [0,0,0,0]): string[] {
+        let input = inputValue.join(''),
             time = this.nowIntegralPointTime;
 
         // 相加
