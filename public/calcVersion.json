@@ -2,7 +2,7 @@
   "v1": {
     "title": "版本1",
     "author": "苏九川来了",
-    "describe": "初始版本"
+    "describe": "初始版本,使用密码本与偏移量来计算"
   },
   "v2": {
     "disabled": false,

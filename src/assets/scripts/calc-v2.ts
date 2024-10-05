@@ -1,14 +1,14 @@
 import {BaseCalcConfig, BaseCalcModel} from "../../data/BaseCalcClass.ts"
 
 export class V2 implements BaseCalcModel {
-    config: BaseCalcConfig = {inputMax: 0, isExportation: false, isInput: false};
+    config: BaseCalcConfig = {inputMax: 4, isExportation: false, isInput: false};
 
     init({}: {}): this {
         return this;
     }
 
     public getInput(): string[] {
-        return this.getOffsetParameter(Date.now()).toString().split('')
+        return this.getOffsetParameter(Date.now() / 1000).toString().split('')
     }
 
     public getExportation(): string[] {
