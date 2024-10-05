@@ -1,5 +1,5 @@
-import {V1 as CalcV1} from "./calc-v1.js"
-import {V2 as CalcV2} from "./calc-v2.js"
+import {V1 as CalcV1} from "./calc-v1.ts"
+import {V2 as CalcV2} from "./calc-v2.ts"
 
 export default class Calc {
     mode(type = 'v2') {

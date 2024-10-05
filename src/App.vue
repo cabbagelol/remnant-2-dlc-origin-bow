@@ -3,8 +3,7 @@ import RoulettePanel from "@/components/RoulettePanel.vue";
 import AllCalcInfo from "../public/calcVersion.json"
 
 import {onMounted, ref} from "vue";
-import {calc} from "@/assets/scripts/index.js";
-import TimePanel from "@/components/TimePanel.vue";
+import {calc} from "@/assets/scripts";
 
 const nowIntegralPointTime = new Date().getHours();
 
@@ -16,9 +15,9 @@ let // setting
 
     // user input
     inputValueBoxView = ref(null),
-    inputValue = ref([9, 9, getRandom(), getRandom()]),
+    inputValue = ref([0, 0, 0, 0]),
 
-    outputValue = ref([1, 6, 0, 0])
+    outputValue = ref([1, 6, 0, 0]);
 
 onMounted(() => {
   onDice()
@@ -28,20 +27,11 @@ onMounted(() => {
  * 骰子
  */
 function onDice() {
-  inputValue.value = [];
   inputValue.value = Array.from({length: calc.mode(useCalcVersion.value).inputMax}, () => getRandom());
 
-  outputValue.value = [];
   getCalcResult();
 }
 
-/**
- * 随机创建初始
- * @returns {number}
- */
-function getRandom() {
-  return Math.floor(Math.random() * 9) + 1;
-}
 
 /**
  * 轮盘触发时间通知计算
@@ -56,9 +46,7 @@ function onRouletteChange() {
 function getCalcResult() {
   outputValue.value = calc.mode(useCalcVersion.value).init({
     useSystemNowIntegralPointTime: useSystemNowIntegralPointTime
-  }).get(inputValue.value, {
-    customIntegralPointTime: customIntegralPointTime
-  })
+  }).getExportation()
 }
 
 </script>
@@ -80,26 +68,28 @@ function getCalcResult() {
           <v-col>
             <!-- 用户输入轮盘 S -->
             <v-card class="mb-3 pb-3">
-              <v-card-title class="text-right">
-                <v-btn flat border @click="onDice">🎲</v-btn>
-              </v-card-title>
+              <!--              <v-card-title class="text-right">-->
+              <!--                <v-btn flat border @click="onDice">🎲</v-btn>-->
+              <!--              </v-card-title>-->
+
               <div class="roulette-input-box mt-10 mb-3">
                 <RoulettePanel
-                    v-for="i in calc.mode(useCalcVersion).inputMax"
-                    :key="i"
-                    :value="inputValue[i-1]"
-                    :type="'write'"
+                    v-for="(i,index) in calc.mode(useCalcVersion).getInput()"
+                    :key="index"
+                    :value="i"
+                    :type="calc.mode(useCalcVersion).config.isInput ? 'write' : 'read'"
                     ref="inputValueBoxView"
                     @change="onRouletteChange">
+                  {{ i }}
                 </RoulettePanel>
               </div>
               <!-- 用户输入轮盘 E -->
 
               <!-- 结果轮盘 S -->
               <div class="roulette-input-box">
-                <RoulettePanel v-for="i in outputValue"
-                               :type="'read'"
-                               :key="i"
+                <RoulettePanel v-for="(i,index) in calc.mode(useCalcVersion).getExportation(inputValue)"
+                               :type="calc.mode(useCalcVersion).config.isExportation ? 'write' : 'read'"
+                               :key="index"
                                :value="i">
                   {{ i }}
                 </RoulettePanel>
@@ -108,11 +98,11 @@ function getCalcResult() {
             </v-card>
             <!-- 结果轮盘 E -->
           </v-col>
-          <v-divider vertical inset class="hidden-xs"></v-divider>
+          <v-divider vertical inset class="hidden-xs hidden-sm ml-4 mr-4"></v-divider>
           <v-col>
             <v-label class="mb-2">
               <v-icon class="mr-2">mdi-clock-time-eight</v-icon>
-              时间 {{ useSystemNowIntegralPointTime }}
+              时间
             </v-label>
 
             <div class="mb-4">
@@ -132,6 +122,9 @@ function getCalcResult() {
             </v-label>
             <v-select :items="calcVersions"
                       v-model="useCalcVersion">
+              <template v-slot:selection>
+                {{ AllCalcInfo[useCalcVersion].title }}
+              </template>
               <template v-slot:item="{ props, item }">
                 <v-list-item v-bind="props" :disabled="AllCalcInfo[item.title].disabled"
                              :title="AllCalcInfo[item.title].title"

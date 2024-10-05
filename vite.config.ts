@@ -7,10 +7,10 @@ import obfuscator from 'rollup-plugin-obfuscator';
 // https://vitejs.dev/config/
 export default defineConfig({
     build: {
-        minify: 'esbuild', // 默认
+        minify: 'esbuild',
     },
     esbuild: {
-        drop: ['console', 'debugger'],//打包去除
+        drop: ['debugger'],
     },
     plugins: [
         vue(),

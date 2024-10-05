@@ -1,35 +1,41 @@
 import dictionariesV1 from "../../../public/v1-code-book.json";
 import {ref} from "vue";
+import {BaseCalcConfig, BaseCalcModel} from "../../data/BaseCalcClass.ts"
 
-export class V1 {
+export class V1 implements BaseCalcModel {
+    config: BaseCalcConfig = {inputMax: 4, isExportation: false, isInput: true};
+
     nowIntegralPointTime = new Date().getHours();
     inputMax = 4;
 
     resultNumber = ref('1600');
     useSystemNowIntegralPointTime = ref(false);
 
-    init({
-             nowIntegralPointTime = new Date().getHours(),
-             inputMax = 4,
-             useSystemNowIntegralPointTime = ref(false),
-         }) {
+    public init({
+                    nowIntegralPointTime = new Date().getHours(),
+                    inputMax = 4,
+                    useSystemNowIntegralPointTime = ref(false),
+                }): this {
         this.nowIntegralPointTime = nowIntegralPointTime;
         this.inputMax = inputMax;
         this.useSystemNowIntegralPointTime = useSystemNowIntegralPointTime;
         return this;
     }
 
+
+    public getInput() {
+        return [5, 5, 5, 5]
+    }
+
     /**
      * 计算
      */
-    get(inputValue = [], {
-        customIntegralPointTime = ref(new Date().getHours())
-    }) {
+    public getExportation(inputValue: number[] = [0, 0, 0, 0]): string[] {
         let input = inputValue.join(''),
-            time = this.useSystemNowIntegralPointTime.value ? this.nowIntegralPointTime : customIntegralPointTime.value.getHours();
+            time = this.nowIntegralPointTime;
 
         // 相加
-        this.resultNumber.value = (Number(input) + this.b(time)).toString();
+        this.resultNumber.value = (Number(input) + this.getOffsetParameter(time)).toString();
 
         // 补全与舍值
         if (this.resultNumber.value.length === 3)
@@ -43,11 +49,9 @@ export class V1 {
 
     /**
      * 字典中区对应时间内密码偏移值
-     * @param nowIntegralPointTime
-     * @returns {number}
      */
-    b(nowIntegralPointTime) {
-        let disT = null
+    private getOffsetParameter(nowIntegralPointTime: number): number {
+        let disT: any = null
         Object.entries(dictionariesV1.t).forEach((i) => {
             if (i[1].indexOf(nowIntegralPointTime) >= 0)
                 disT = i[0]

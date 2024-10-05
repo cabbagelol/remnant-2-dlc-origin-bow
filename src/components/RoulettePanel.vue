@@ -1,6 +1,9 @@
 <script setup>
 
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
+
+const valueMax = 9,
+    valueMin = 0;
 
 let n_value = ref(0),
     value = computed(() => n_value.value),
@@ -10,6 +13,10 @@ let n_value = ref(0),
 let props = defineProps({
   type: String,
   value: Number | String
+})
+
+watch(() => props.value, (newValue, oldValue) => {
+  n_value.value = newValue;
 })
 
 onMounted(() => {
@@ -41,13 +48,13 @@ defineExpose({value})
 
 <template>
   <div>
-    <v-card border class="roulette-col" elevation="5" :class="props.type !== 'write' ? 'y':'n'">
-      <v-btn-group style="height: 70px;" variant="outlined" color="primary">
-        <v-btn icon density="compact" @click="rem" :disabled="props.type !== 'write'" >
+    <v-card border class="roulette-col" :class="props.type !== 'write' ? 'y':'n'">
+      <v-btn-group style="height: 70px;" variant="tonal" color="primary">
+        <v-btn icon density="compact" @click="rem" :disabled="props.type !== 'write' || value <= valueMin">
           <v-icon>mdi-minus</v-icon>
         </v-btn>
-        <v-img :src="numberAsImage[value]" :alt="value" :title="value" cover class="img" width="45" height="70px"/>
-        <v-btn icon density="compact" @click="add" :disabled="props.type !== 'write'">
+        <img :src="numberAsImage[value]" :alt="value" :title="value" cover class="img" width="45" height="70px"/>
+        <v-btn icon density="compact" @click="add" :disabled="props.type !== 'write' || value >= valueMax">
           <v-icon>mdi-plus</v-icon>
         </v-btn>
       </v-btn-group>
@@ -59,6 +66,7 @@ defineExpose({value})
 <style scoped>
 
 .roulette-col {
+  user-select: none;
   display: flex;
   margin: 0 5px;
   border-radius: 5px;

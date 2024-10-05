@@ -1,4 +1,4 @@
-import Calc from "./calc.js"
+import Calc from "./calc.ts"
 
 const calc = new Calc();
 
