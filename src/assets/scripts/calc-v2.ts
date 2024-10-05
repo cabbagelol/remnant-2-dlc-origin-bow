@@ -8,13 +8,11 @@ export class V2 implements BaseCalcModel {
     }
 
     public getInput(): string[] {
-        return this.getOffsetParameter(Date.now())
-            .toString().split('')
+        return this.getOffsetParameter(Date.now()).toString().split('')
     }
 
     public getExportation(): string[] {
-        return this.getOffsetParameter(Date.now() / 1000 + 3600)
-            .toString().split('')
+        return this.getOffsetParameter(Date.now() / 1000 + 3600).toString().split('')
     }
 
     private getOffsetParameter(ts: number): string {

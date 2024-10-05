@@ -1,6 +1,8 @@
 import {ref} from "vue";
 import {BaseCalcConfig, BaseCalcModel} from "../../data/BaseCalcClass.ts"
 
+import dictionariesV1 from '../../../public/v1-code-book.json';
+
 export class V1 implements BaseCalcModel {
     config: BaseCalcConfig = {inputMax: 4, isExportation: false, isInput: true};
 
@@ -29,8 +31,8 @@ export class V1 implements BaseCalcModel {
     /**
      * 计算
      */
-    public getExportation(inputValue: number[] = [0, 0, 0, 0]): string[] {
-        let input = inputValue.join(''),
+    public getExportation(inputValue: any): string[] {
+        let input = inputValue.join('') && inputValue.value.join(''),
             time = this.nowIntegralPointTime;
 
         // 相加
@@ -49,8 +51,7 @@ export class V1 implements BaseCalcModel {
     /**
      * 字典中区对应时间内密码偏移值
      */
-    private async getOffsetParameter(nowIntegralPointTime: number): number  {
-        let dictionariesV1 = await import('../../../public/v1-code-book.json')
+    private getOffsetParameter(nowIntegralPointTime: number): number  {
         let disT: string = "0"
         Object.entries(dictionariesV1.t).forEach((i) => {
             if (i[1].indexOf(nowIntegralPointTime) >= 0)
