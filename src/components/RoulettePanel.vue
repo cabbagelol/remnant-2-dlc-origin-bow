@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 
 import {computed, onMounted, ref, watch} from "vue";
 
@@ -7,15 +7,15 @@ const valueMax = 9,
 
 let n_value = ref(0),
     value = computed(() => n_value.value),
-    numberAsImage = [],
+    numberAsImage: [] = [],
     $emit = defineEmits(['change']);
 
 let props = defineProps({
   type: String,
-  value: Number | String
+  value: Number
 })
 
-watch(() => props.value, (newValue, oldValue) => {
+watch(() => props.value, (newValue, oldValue: any) => {
   n_value.value = newValue;
 })
 

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import RoulettePanel from "@/components/RoulettePanel.vue";
+import RoulettePanel from "./components/RoulettePanel.vue";
 import AllCalcInfo from "../public/calcVersion.json"
 
 import {onMounted, ref} from "vue";
-import {calc} from "@/assets/scripts";
+import {calc} from "./assets/scripts";
 
 const nowIntegralPointTime = new Date().getHours();
 
@@ -27,7 +27,7 @@ onMounted(() => {
  * 骰子
  */
 function onDice() {
-  inputValue.value = Array.from({length: calc.mode(useCalcVersion.value).inputMax}, () => getRandom());
+  inputValue.value = Array.from({length: calc.mode(useCalcVersion.value).config.inputMax}, () => 0);
 
   getCalcResult();
 }
@@ -37,7 +37,7 @@ function onDice() {
  * 轮盘触发时间通知计算
  */
 function onRouletteChange() {
-  for (let index = 0; index < calc.mode(useCalcVersion.value).inputMax; index++) {
+  for (let index = 0; index < calc.mode(useCalcVersion.value).config.inputMax; index++) {
     inputValue.value[index] = inputValueBoxView.value[index].value
   }
   getCalcResult();

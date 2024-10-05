@@ -1,0 +1,1 @@
+{"root":["./src/main.ts","./src/vite-env.d.ts","./src/vuetify.ts","./src/assets/scripts/calc-v1.ts","./src/assets/scripts/calc-v2.ts","./src/assets/scripts/calc.ts","./src/assets/scripts/index.ts","./src/data/basecalcclass.ts","./src/app.vue","./src/components/roulettepanel.vue","./src/components/timepanel.vue"],"errors":true,"version":"5.6.2"}

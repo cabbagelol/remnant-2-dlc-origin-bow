@@ -1,4 +1,3 @@
-import dictionariesV1 from "../../../public/v1-code-book.json";
 import {ref} from "vue";
 import {BaseCalcConfig, BaseCalcModel} from "../../data/BaseCalcClass.ts"
 
@@ -50,12 +49,14 @@ export class V1 implements BaseCalcModel {
     /**
      * 字典中区对应时间内密码偏移值
      */
-    private getOffsetParameter(nowIntegralPointTime: number): number {
-        let disT: any = null
+    private async getOffsetParameter(nowIntegralPointTime: number): number  {
+        let dictionariesV1 = await import('../../../public/v1-code-book.json')
+        let disT: string = "0"
         Object.entries(dictionariesV1.t).forEach((i) => {
             if (i[1].indexOf(nowIntegralPointTime) >= 0)
                 disT = i[0]
         })
+
 
         return Number(dictionariesV1.d[disT]);
     }
