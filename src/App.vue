@@ -9,7 +9,7 @@ const nowIntegralPointTime = new Date().getHours();
 
 let // setting
     calcVersions = ['v1', 'v2'],
-    useCalcVersion = ref('v1'),
+    useCalcVersion = ref('v2'),
     useSystemNowIntegralPointTime = ref(true),
     customIntegralPointTime = ref(new Date()),
 
