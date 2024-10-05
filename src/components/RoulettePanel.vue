@@ -41,11 +41,17 @@ defineExpose({value})
 
 <template>
   <div>
-    <div class="roulette-col" :class="props.type !== 'write' ? 'y':'n'">
-      <button @click="rem" :disabled="props.type !== 'write'" >-</button>
-      <img :src="numberAsImage[value]" :alt="value" :title="value"/>
-      <button @click="add" :disabled="props.type !== 'write'">+</button>
-    </div>
+    <v-card border class="roulette-col" elevation="5" :class="props.type !== 'write' ? 'y':'n'">
+      <v-btn-group style="height: 70px;" variant="outlined" color="primary">
+        <v-btn icon density="compact" @click="rem" :disabled="props.type !== 'write'" >
+          <v-icon>mdi-minus</v-icon>
+        </v-btn>
+        <v-img :src="numberAsImage[value]" :alt="value" :title="value" cover class="img" width="45" height="70px"/>
+        <v-btn icon density="compact" @click="add" :disabled="props.type !== 'write'">
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+      </v-btn-group>
+    </v-card>
     <div class="roulette-text">{{ value }}</div>
   </div>
 </template>
@@ -63,7 +69,7 @@ defineExpose({value})
   background: #000;
 }
 
-.roulette-col.y button {
+.roulette-col.y .v-btn {
   visibility: hidden;
 }
 
@@ -71,30 +77,16 @@ defineExpose({value})
   text-align: center;
   background: rgba(0, 0, 0, 0.22);
   border-radius: 4px;
-  margin: 3px auto;
+  margin: 7px auto;
   width: 20px;
   color: #f2f2f2;
   font-size: 12px;
 }
 
-.roulette-col img {
+.roulette-col .img {
   width: 40px;
   height: 70px;
   filter: grayscale(1);
   mask: url("/public/images/0.png") no-repeat center center;
-}
-
-.roulette-col button {
-  background: transparent;
-  outline: 0;
-  border: 0;
-  padding: 0 10px;
-  cursor: pointer;
-  color: #f2f2f2;
-}
-
-.roulette-col button:hover {
-  background: #222222;
-  color: #f2f2f2;
 }
 </style>

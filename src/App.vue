@@ -1,22 +1,39 @@
-<script setup>
-import dis from "../public/code-book.json"
-
+<script setup lang="ts">
 import RoulettePanel from "@/components/RoulettePanel.vue";
+import AllCalcInfo from "../public/calcVersion.json"
+
 import {onMounted, ref} from "vue";
+import {calc} from "@/assets/scripts/index.js";
+import TimePanel from "@/components/TimePanel.vue";
 
-const nowIntegralPointTime = new Date().getHours(),
-    inputMax = 4;
+const nowIntegralPointTime = new Date().getHours();
 
-let useSystemNowIntegralPointTime = ref(true),
+let // setting
+    calcVersions = ['v1', 'v2'],
+    useCalcVersion = ref('v1'),
+    useSystemNowIntegralPointTime = ref(true),
     customIntegralPointTime = ref(new Date()),
-    inputValueBox = ref(null),
-    inputValue = [9, 9, getRandom(), getRandom()],
-    resultNumber = ref('1600'),
+
+    // user input
+    inputValueBoxView = ref(null),
+    inputValue = ref([9, 9, getRandom(), getRandom()]),
+
     outputValue = ref([1, 6, 0, 0])
 
 onMounted(() => {
-  onCalc()
+  onDice()
 })
+
+/**
+ * 骰子
+ */
+function onDice() {
+  inputValue.value = [];
+  inputValue.value = Array.from({length: calc.mode(useCalcVersion.value).inputMax}, () => getRandom());
+
+  outputValue.value = [];
+  getCalcResult();
+}
 
 /**
  * 随机创建初始
@@ -28,102 +45,122 @@ function getRandom() {
 
 /**
  * 轮盘触发时间通知计算
- * @param value
  */
-function onRouletteChange(value) {
-  for (let index = 0; index < inputMax; index++) {
-    inputValue[index] = inputValueBox.value[index].value
+function onRouletteChange() {
+  for (let index = 0; index < calc.mode(useCalcVersion.value).inputMax; index++) {
+    inputValue.value[index] = inputValueBoxView.value[index].value
   }
-  onCalc();
+  getCalcResult();
 }
 
-/**
- * 计算
- */
-function onCalc() {
-  let input = inputValue.join(''),
-      time = useSystemNowIntegralPointTime.value ? nowIntegralPointTime : customIntegralPointTime.value.getHours();
-
-  // 相加
-  resultNumber.value = (Number(input) + b(time)).toString();
-
-  // 补全与舍值
-  if (resultNumber.value.length === 3)
-    resultNumber.value = `0${resultNumber.value}`
-  else if (resultNumber.value.length === 5)
-    resultNumber.value = resultNumber.value.slice(1, 5);
-
-  // 字符转数组
-  outputValue.value = resultNumber.value.toString().split('')
-}
-
-/**
- * 字典中区对应时间内密码偏移值
- * @param nowIntegralPointTime
- * @returns {number}
- */
-function b(nowIntegralPointTime) {
-  let disT = null
-  Object.entries(dis.t).forEach((i) => {
-    if (i[1].indexOf(nowIntegralPointTime) >= 0)
-      disT = i[0]
+function getCalcResult() {
+  outputValue.value = calc.mode(useCalcVersion.value).init({
+    useSystemNowIntegralPointTime: useSystemNowIntegralPointTime
+  }).get(inputValue.value, {
+    customIntegralPointTime: customIntegralPointTime
   })
-
-  return Number(dis.d[disT]);
 }
+
 </script>
 
 <template>
-  <main>
-    <div class="tool" style="display: none">
-      <label>
-        <input type="checkbox" v-model="useSystemNowIntegralPointTime"/>使用系统时间
-        <template v-if="useSystemNowIntegralPointTime">
-          {{ nowIntegralPointTime }}:00
-        </template>
-        <template v-else>
-          <input type="time" class="custom-time-input" v-model="customIntegralPointTime"
-                 v-if="!useSystemNowIntegralPointTime"/>
-        </template>
-      </label>
-    </div>
+  <v-app>
+    <v-app-bar>
+      <v-app-bar-nav-icon>
+        <v-img src="/header_logo.webp" width="10px" height="25px"/>
+      </v-app-bar-nav-icon>
+      <v-app-bar-title>
+        遗迹2 DLC 起源工具大门解密计算器
+      </v-app-bar-title>
+    </v-app-bar>
 
-    <br/>
+    <v-main class="tool">
+      <v-container class="fill-height">
+        <v-row>
+          <v-col>
+            <!-- 用户输入轮盘 S -->
+            <v-card class="mb-3 pb-3">
+              <v-card-title class="text-right">
+                <v-btn flat border @click="onDice">🎲</v-btn>
+              </v-card-title>
+              <div class="roulette-input-box mt-10 mb-3">
+                <RoulettePanel
+                    v-for="i in calc.mode(useCalcVersion).inputMax"
+                    :key="i"
+                    :value="inputValue[i-1]"
+                    :type="'write'"
+                    ref="inputValueBoxView"
+                    @change="onRouletteChange">
+                </RoulettePanel>
+              </div>
+              <!-- 用户输入轮盘 E -->
 
-    <div class="roulette-input-box">
-      <RoulettePanel
-          v-for="i in inputMax"
-          :key="i"
-          :value="inputValue[i-1]"
-          :type="'write'"
-          ref="inputValueBox"
-          @change="onRouletteChange">
-      </RoulettePanel>
-    </div>
+              <!-- 结果轮盘 S -->
+              <div class="roulette-input-box">
+                <RoulettePanel v-for="i in outputValue"
+                               :type="'read'"
+                               :key="i"
+                               :value="i">
+                  {{ i }}
+                </RoulettePanel>
+              </div>
 
-    <div class="roulette-input-box">
-      <RoulettePanel v-for="i in outputValue"
-                     :type="'read'"
-                     :key="i"
-                     :value="i">
-        {{ i }}
-      </RoulettePanel>
-    </div>
+            </v-card>
+            <!-- 结果轮盘 E -->
+          </v-col>
+          <v-divider vertical inset class="hidden-xs"></v-divider>
+          <v-col>
+            <v-label class="mb-2">
+              <v-icon class="mr-2">mdi-clock-time-eight</v-icon>
+              时间 {{ useSystemNowIntegralPointTime }}
+            </v-label>
 
-    <br/>
+            <div class="mb-4">
+              <v-btn-toggle wdith="300px" color="primary" mandatory v-model="useSystemNowIntegralPointTime" divided>
+                <v-btn :value="true" width="150px">
+                  {{ nowIntegralPointTime }}:00
+                </v-btn>
+                <v-btn :value="false" width="150px" disabled>
+                  <input type="time" class="custom-time-input" v-model="customIntegralPointTime"/>
+                </v-btn>
+              </v-btn-toggle>
+            </div>
 
-    <div>
-      注意事项:<br/>
-      1. 请以主机玩家来破译<br/>
-    </div>
-  </main>
+            <v-label class="mb-2">
+              <v-icon class="mr-1">mdi-function</v-icon>
+              使用算法版本
+            </v-label>
+            <v-select :items="calcVersions"
+                      v-model="useCalcVersion">
+              <template v-slot:item="{ props, item }">
+                <v-list-item v-bind="props" :disabled="AllCalcInfo[item.title].disabled"
+                             :title="AllCalcInfo[item.title].title"
+                             :subtitle="AllCalcInfo[item.title].describe"></v-list-item>
+              </template>
+            </v-select>
 
-  <hr/>
 
-  <footer>
-    破译方式作者: <a href="https://www.bilibili.com/video/BV1gfx2egETJ">苏九川来了</a> , 程序作者: <a
-      href="http://cabbagelol.net">cabbagelol</a>
-  </footer>
+            <v-alert type="info" variant="tonal" class="mt-5">
+              <b>注意事项:</b><br/>
+              <ol class="ml-5">
+                <li>请以主机玩家来破译</li>
+                <li>修改过时间需要游戏重启</li>
+              </ol>
+            </v-alert>
+          </v-col>
+        </v-row>
+      </v-container>
+      <v-divider/>
+      <v-footer tile class="text-center">
+        <v-container>
+          <span class="opacity-50">
+                 破译方式作者: <a href="https://www.bilibili.com/video/BV1gfx2egETJ">苏九川来了</a> , 程序作者: <a
+              href="http://cabbagelol.net">cabbagelol</a>
+          </span>
+        </v-container>
+      </v-footer>
+    </v-main>
+  </v-app>
 </template>
 
 <style>
@@ -140,7 +177,7 @@ hr {
 
 .roulette-input-box {
   display: flex;
-  margin: 0 0 10px 0;
+  justify-content: center;
 }
 
 .custom-time-input::-webkit-calendar-picker-indicator {

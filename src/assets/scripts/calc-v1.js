@@ -1,0 +1,58 @@
+import dictionariesV1 from "../../../public/v1-code-book.json";
+import {ref} from "vue";
+
+export class V1 {
+    nowIntegralPointTime = new Date().getHours();
+    inputMax = 4;
+
+    resultNumber = ref('1600');
+    useSystemNowIntegralPointTime = ref(false);
+
+    init({
+             nowIntegralPointTime = new Date().getHours(),
+             inputMax = 4,
+             useSystemNowIntegralPointTime = ref(false),
+         }) {
+        this.nowIntegralPointTime = nowIntegralPointTime;
+        this.inputMax = inputMax;
+        this.useSystemNowIntegralPointTime = useSystemNowIntegralPointTime;
+        return this;
+    }
+
+    /**
+     * 计算
+     */
+    get(inputValue = [], {
+        customIntegralPointTime = ref(new Date().getHours())
+    }) {
+        let input = inputValue.join(''),
+            time = this.useSystemNowIntegralPointTime.value ? this.nowIntegralPointTime : customIntegralPointTime.value.getHours();
+
+        // 相加
+        this.resultNumber.value = (Number(input) + this.b(time)).toString();
+
+        // 补全与舍值
+        if (this.resultNumber.value.length === 3)
+            this.resultNumber.value = `0${this.resultNumber.value}`
+        else if (this.resultNumber.value.length === 5)
+            this.resultNumber.value = this.resultNumber.value.slice(1, 5);
+
+        // 字符转数组
+        return this.resultNumber.value.toString().split('');
+    }
+
+    /**
+     * 字典中区对应时间内密码偏移值
+     * @param nowIntegralPointTime
+     * @returns {number}
+     */
+    b(nowIntegralPointTime) {
+        let disT = null
+        Object.entries(dictionariesV1.t).forEach((i) => {
+            if (i[1].indexOf(nowIntegralPointTime) >= 0)
+                disT = i[0]
+        })
+
+        return Number(dictionariesV1.d[disT]);
+    }
+}
