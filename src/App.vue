@@ -1,31 +1,40 @@
 <script setup lang="ts">
-import RoulettePanel from "./components/RoulettePanel.vue";
+import RoulettePanel from "./components/RoulettePanel.vue"
 import ChatView from "./components/chat.vue"
 import HeaderView from "./components/header.vue"
 import FooterView from "./components/footer.vue"
-import AllCalcInfo from "../public/calcVersion.json"
+import AllCalcInfo from "/public/calcVersion.json";
 
-import {onMounted, ref} from "vue";
+import {onMounted, Ref, ref} from "vue";
 import {algorithm} from "./assets/scripts";
+import {useRoute} from "vue-router";
 
-const nowIntegralPointTime = new Date().getHours();
+const route = useRoute();
 
 let // setting
-    calcVersions = ['suqiqun', 'cowaii'],
-    useAlgorithm = ref('cowaii'),
+    algorithms = algorithm.all,
+    useAlgorithm = ref(algorithm.default),
     useAlgorithmCalcVersion = ref('v1'),
     useSystemNowIntegralPointTime = ref(true),
-    customIntegralPointTime = ref(new Date()),
+    useCustomIntegralPointTime = ref(0),
+    nowIntegralPointTime = ref(new Date().getHours()),
 
     // user input
-    inputValueBoxView = ref(null),
+    inputValueBoxView: Ref<null | any> = ref(null),
     inputValue = ref([0, 0, 0, 0]),
 
-    outputValue = ref([1, 6, 0, 0]);
+    outputValue: Ref<number[] | any> = ref([1, 6, 0, 0]);
 
 onMounted(() => {
   onDice()
+  onUpdateTime()
 })
+
+function onUpdateTime() {
+  setTimeout(() => {
+    nowIntegralPointTime.value = new Date().getHours()
+  }, 1000)
+}
 
 /**
  * 骰子
@@ -34,6 +43,10 @@ function onDice() {
   inputValue.value = Array.from({length: algorithm.mode(useAlgorithm.value).get(null).config.inputMax}, () => 0);
 
   getCalcResult();
+}
+
+function onChangeAlgorithm() {
+  useAlgorithmCalcVersion.value = algorithm.mode(useAlgorithm.value).useDefaultVersion;
 }
 
 
@@ -62,10 +75,10 @@ function getCalcResult() {
     <v-main class="tool">
       <v-container>
         <v-row class="mt-5">
-          <v-col>
+          <v-col :sm="12" :md="12" :lg="6" :xl="6">
             <!-- 用户输入轮盘 S -->
-            <v-card class="mb-3 pb-3">
-              <div class="roulette-input-box overflow-y-auto mt-10 mb-3">
+            <v-card class="mb-2 d-block" variant="text" min-width="400px">
+              <v-row justify="center" class="roulette-input-box overflow-y-auto mt-8 mb-3 flex-nowrap">
                 <RoulettePanel
                     v-for="(i,index) in algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).getInput()"
                     :key="index"
@@ -75,67 +88,97 @@ function getCalcResult() {
                     @change="onRouletteChange">
                   {{ i }}
                 </RoulettePanel>
-              </div>
+              </v-row>
               <!-- 用户输入轮盘 E -->
 
               <!-- 结果轮盘 S -->
-              <div class="roulette-input-box overflow-y-auto">
-                <RoulettePanel v-for="(i,index) in algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).getExportation(inputValue)"
-                               :type="algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).config.isExportation ? 'write' : 'read'"
-                               :key="index"
-                               :value="i">
+              <v-row justify="center" class="roulette-input-box overflow-y-auto flex-nowrap">
+                <RoulettePanel
+                    v-for="(i,index) in algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).getExportation(inputValue)"
+                    :type="algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).config.isExportation ? 'write' : 'read'"
+                    :key="index"
+                    :value="i">
                   {{ i }}
                 </RoulettePanel>
-              </div>
+              </v-row>
 
             </v-card>
             <!-- 结果轮盘 E -->
           </v-col>
-          <v-divider vertical inset class="hidden-xs hidden-sm ml-4 mr-4"></v-divider>
-          <v-col>
-            <v-label class="mb-2">
+          <v-col :sm="12" :md="12" :lg="6" :xl="6">
+            <v-label class="mb-3">
               <v-icon class="mr-2">mdi-clock-time-eight</v-icon>
               时间
             </v-label>
 
-            <div class="mb-4">
-              <v-btn-toggle wdith="300px" color="primary" mandatory v-model="useSystemNowIntegralPointTime" divided>
-                <v-btn :value="true" width="150px">
-                  {{ nowIntegralPointTime }}:00
-                </v-btn>
-                <v-btn :value="false" width="150px" disabled>
-                  <input type="time" class="custom-time-input" v-model="customIntegralPointTime"/>
-                </v-btn>
-              </v-btn-toggle>
-            </div>
+            <v-row align="center" class="mb-4">
+              <v-col>
+                <v-btn-toggle wdith="300px"
+                              color="primary" mandatory
+                              v-model="useSystemNowIntegralPointTime" divided>
+                  <v-btn :value="true" width="80px">
+                    {{ nowIntegralPointTime }}
+                  </v-btn>
+                  <v-btn class="pa-0"
+                         width="80px"
+                         :value="false"
+                         :disabled="!algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).config.isCustomTime">
+                    <v-select :items="Array.from({length: 24}, (e,i) => i)"
+                              v-model="useCustomIntegralPointTime"
+                              variant="filled"
+                              width="80px"
+                              density="comfortable"
+                              tile>
+                    </v-select>
+                  </v-btn>
+                </v-btn-toggle>
+                <span class="ml-5">点</span>
+              </v-col>
+            </v-row>
 
             <v-row>
               <v-col :xm="12" :md="12" :lg="6">
-                <v-label class="mb-2">
+                <v-label class="mb-3">
                   <v-icon class="mr-1">mdi-function</v-icon>
                   使用算法
                 </v-label>
-                <v-select :items="calcVersions"
+                <v-select :items="algorithms"
+                          @update:model-value="onChangeAlgorithm"
                           v-model="useAlgorithm">
                   <template v-slot:selection>
                     {{ AllCalcInfo[useAlgorithm].title }}
                   </template>
                   <template v-slot:item="{ props, item }">
                     <v-list-item v-bind="props" :disabled="AllCalcInfo[item.title].disabled"
-                                :title="AllCalcInfo[item.title].title"></v-list-item>
+                                 :title="AllCalcInfo[item.title].title"></v-list-item>
                   </template>
                 </v-select>
 
-                <p class="text-info">{{ AllCalcInfo[useAlgorithm].describe }}</p>
+                <p class="text-subtitle-2 opacity-40">{{ AllCalcInfo[useAlgorithm].describe }}</p>
               </v-col>
               <v-col :xm="12" :md="12" :lg="6">
-                <v-label class="mb-2">
+                <v-label class="mb-3">
                   算法版本
+                  <v-chip density="compact" class="ml-2">{{ algorithm.mode(useAlgorithm).versions.length }}</v-chip>
                 </v-label>
                 <v-select :items="algorithm.mode(useAlgorithm).versions"
-                v-model="useAlgorithmCalcVersion"></v-select>
+                          v-model="useAlgorithmCalcVersion">
+                  <template v-slot:item="{ props, item }">
+                    <v-list-item v-bind="props"
+                                 :title="item.title">
+                      <template v-slot:append>
+                        <v-chip>{{
+                            algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).creationTime || 'none'
+                          }}
+                        </v-chip>
+                      </template>
+                    </v-list-item>
+                  </template>
+                </v-select>
 
-                <p class="text-info">{{ AllCalcInfo[useAlgorithm].versions[useAlgorithmCalcVersion].describe }}</p>
+                <p class="text-subtitle-2 opacity-40">
+                  {{ AllCalcInfo[useAlgorithm].versions[useAlgorithmCalcVersion].describe ??= 'none' }}
+                </p>
               </v-col>
             </v-row>
           </v-col>
@@ -152,7 +195,6 @@ function getCalcResult() {
 <style>
 .roulette-input-box {
   display: flex;
-  justify-content: center;
 }
 
 .custom-time-input::-webkit-calendar-picker-indicator {

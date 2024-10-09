@@ -12,7 +12,7 @@ let n_value = ref(0),
 
 let props = defineProps({
   type: String,
-  value: Number
+  value: Number | undefined
 })
 
 watch(() => props.value, (newValue, oldValue: any) => {
@@ -47,7 +47,7 @@ defineExpose({value})
 </script>
 
 <template>
-  <div>
+  <div class="pb-4">
     <v-card border class="roulette-col" :class="props.type !== 'write' ? 'y':'n'">
       <v-btn-group style="height: 70px;" variant="tonal" color="primary">
         <v-btn icon density="compact" @click="rem" :disabled="props.type !== 'write' || value <= valueMin">
@@ -59,7 +59,10 @@ defineExpose({value})
         </v-btn>
       </v-btn-group>
     </v-card>
-    <div class="roulette-text">{{ value }}</div>
+
+    <div class="text-center mt-1">
+      <v-chip density="compact" variant="tonal" border class="ml-auto mr-auto">{{ value }}</v-chip>
+    </div>
   </div>
 </template>
 
@@ -70,7 +73,6 @@ defineExpose({value})
   display: flex;
   margin: 0 5px;
   border-radius: 5px;
-  overflow: hidden;
 }
 
 .roulette-col.n {
@@ -79,16 +81,6 @@ defineExpose({value})
 
 .roulette-col.y .v-btn {
   visibility: hidden;
-}
-
-.roulette-text {
-  text-align: center;
-  background: rgba(0, 0, 0, 0.22);
-  border-radius: 4px;
-  margin: 7px auto;
-  width: 20px;
-  color: #f2f2f2;
-  font-size: 12px;
 }
 
 .roulette-col .img {

@@ -1,10 +1,11 @@
-import {SuqiqunAlgorithm} from "./0/index"
-import {CowaiiAlgorithm} from "./1/index"
+import {SuqiqunAlgorithm} from "./0/"
+import {CowaiiAlgorithm} from "./1/"
 
 export default class MainAlgorithm {
-    default = 'suqiqun'
+    default = 'cowaii'
+    all: string[] = ['suqiqun', 'cowaii']
 
-    mode(type = 'v2') {
+    mode(type: string = this.default) {
         switch (type) {
             case "suqiqun":
                 return this.suqiqun;
@@ -14,6 +15,6 @@ export default class MainAlgorithm {
         }
     }
 
-    suqiqun = new SuqiqunAlgorithm();
-    cowaii = new CowaiiAlgorithm();
+    suqiqun: SuqiqunAlgorithm = new SuqiqunAlgorithm();
+    cowaii: CowaiiAlgorithm = new CowaiiAlgorithm();
 }
