@@ -1,7 +1,7 @@
-import Calc from "./calc.ts"
+import MainAlgorithm from "./algorithm/index"
 
-const calc = new Calc();
+const algorithm = new MainAlgorithm();
 
 export {
-    calc
+    algorithm
 }

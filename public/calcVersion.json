@@ -1,13 +1,29 @@
 {
-  "v1": {
-    "title": "版本1",
+  "suqiqun": {
+    "title":"苏九川密码本",
     "author": "苏九川来了",
-    "describe": "初始版本,使用密码本与偏移量来计算"
+    "describe": "由Bilibili的UP苏九川，使用密码本与偏移量来计算",
+    "versions":{
+      "v1": {
+        "title": "版本1",
+        "describe": "初始版本"
+      },
+      "v2": {
+        "title": "版本2",
+        "describe": "改动加变减【仍然在测试】"
+      }
+    }
   },
-  "v2": {
+  "cowaii": {
+    "title":"Cowaii反编译推算",
+    "author": "cowaii.com",
+    "describe": "通过反编程序获取计算版本，由社区开源提供，从cowaii获取",
     "disabled": false,
-    "author": "苏九川来了",
-    "title": "版本2",
-    "describe": "改良版本，对偏移有一定修复，提高计算结果正确性"
+    "versions": {
+      "v1": {
+        "title": "版本1",
+        "describe": "初始版本"
+      }
+    }
   }
 }

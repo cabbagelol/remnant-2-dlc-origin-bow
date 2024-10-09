@@ -1,17 +1,25 @@
 import {ref} from "vue";
-import {BaseCalcConfig, BaseCalcModel} from "../../data/BaseCalcClass.ts"
+import {BaseCalcConfig, BaseCalcItem} from "../../../../data/BaseCalcClass.ts"
 
-import dictionariesV1 from '../../../public/v1-code-book.json';
+import dictionariesV1 from '../../../../../public/v1-code-book.json';
 
-export class V1 implements BaseCalcModel {
-    config: BaseCalcConfig = {inputMax: 4, isExportation: false, isInput: true};
+export class SuqiqunV1 implements BaseCalcItem {
+    // base var
+    creationTime: string = "2024年10月06日00:00:00";
+    version: string = "v1";
+    config: BaseCalcConfig = {
+        inputMax: 4, isExportation: false, isInput: true,
+        isCustomTime: true
+    };
 
+    // private var
     nowIntegralPointTime = new Date().getHours();
     inputMax = 4;
 
     resultNumber = ref('1600');
     useSystemNowIntegralPointTime = ref(false);
 
+    // ============ fun ============
     public init({
                     nowIntegralPointTime = new Date().getHours(),
                     inputMax = 4,
@@ -57,7 +65,6 @@ export class V1 implements BaseCalcModel {
             if (i[1].indexOf(nowIntegralPointTime) >= 0)
                 disT = i[0]
         })
-
 
         return Number(dictionariesV1.d[disT]);
     }

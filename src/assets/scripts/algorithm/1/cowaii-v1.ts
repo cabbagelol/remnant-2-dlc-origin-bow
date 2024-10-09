@@ -1,8 +1,17 @@
-import {BaseCalcConfig, BaseCalcModel} from "../../data/BaseCalcClass.ts"
+import {BaseCalcConfig, BaseCalcItem} from "../../../../data/BaseCalcClass.ts"
 
-export class V2 implements BaseCalcModel {
-    config: BaseCalcConfig = {inputMax: 4, isExportation: false, isInput: false};
+export class CowaiiV1 implements BaseCalcItem {
+    // base var
+    creationTime: string = "2024年10月01日20:16:19";
+    version: string = "v1";
+    config: BaseCalcConfig = {
+        inputMax: 4, isExportation: false, isInput: false,
+        isCustomTime: false
+    };
 
+    // private var
+
+    // ============ fun ============
     init({}: {}): this {
         return this;
     }
@@ -15,6 +24,11 @@ export class V2 implements BaseCalcModel {
         return this.getOffsetParameter(Date.now() / 1000 + 3600).toString().split('')
     }
 
+    /**
+     * 编译量
+     * @param ts 时间戳
+     * @returns 
+     */
     private getOffsetParameter(ts: number): string {
         const seeds = {
             code: 9358314,
