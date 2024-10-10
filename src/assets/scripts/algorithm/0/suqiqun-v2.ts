@@ -44,7 +44,7 @@ export class SuqiqunV2 implements BaseCalcItem {
             time = this.nowIntegralPointTime;
 
         // 相加
-        this.resultNumber.value = (Number(input) + this.getOffsetParameter(time)).toString();
+        this.resultNumber.value = (Number(input) - this.getOffsetParameter(time)).toString();
 
         // 补全与舍值
         if (this.resultNumber.value.length === 3)
