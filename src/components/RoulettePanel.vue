@@ -48,12 +48,14 @@ defineExpose({value})
 
 <template>
   <div class="pb-4">
-    <v-card border class="roulette-col" :class="props.type !== 'write' ? 'y':'n'">
+    <v-card border elevation="0" class="roulette-col" :class="props.type !== 'write' ? 'y':'n'">
       <v-btn-group style="height: 70px;" variant="tonal" color="primary">
         <v-btn icon density="compact" @click="rem" :disabled="props.type !== 'write' || value <= valueMin">
           <v-icon>mdi-minus</v-icon>
         </v-btn>
-        <img :src="numberAsImage[value]" :alt="value" :title="value" cover class="img" width="45" height="70px"/>
+        <v-divider vertical></v-divider>
+        <v-img :src="numberAsImage[value]" :alt="value" :title="value" cover class="img" width="45" height="70px"/>
+        <v-divider vertical></v-divider>
         <v-btn icon density="compact" @click="add" :disabled="props.type !== 'write' || value >= valueMax">
           <v-icon>mdi-plus</v-icon>
         </v-btn>
@@ -76,7 +78,7 @@ defineExpose({value})
 }
 
 .roulette-col.n {
-  background: #000;
+  background: -moz-visitedhyperlinktext;
 }
 
 .roulette-col.y .v-btn {

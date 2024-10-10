@@ -13,24 +13,17 @@ export class SuqiqunV1 implements BaseCalcItem {
     };
 
     // private var
-    nowIntegralPointTime = new Date().getHours();
-    inputMax = 4;
+    integralPointTime = new Date().getHours(); // 整点时间，可是系统也可自定义
 
     resultNumber = ref('1600');
-    useSystemNowIntegralPointTime = ref(false);
 
     // ============ fun ============
     public init({
-                    nowIntegralPointTime = new Date().getHours(),
-                    inputMax = 4,
-                    useSystemNowIntegralPointTime = ref(false),
+                    integralPointTime = 0,
                 }): this {
-        this.nowIntegralPointTime = nowIntegralPointTime;
-        this.inputMax = inputMax;
-        this.useSystemNowIntegralPointTime = useSystemNowIntegralPointTime;
+        this.integralPointTime = integralPointTime;
         return this;
     }
-
 
     public getInput() {
         return [5, 5, 5, 5]
@@ -39,9 +32,9 @@ export class SuqiqunV1 implements BaseCalcItem {
     /**
      * 计算
      */
-    public getExportation(inputValue: number[] = [0,0,0,0]): string[] {
+    public getExportation(inputValue: number[] = [0, 0, 0, 0]): string[] {
         let input = inputValue.join(''),
-            time = this.nowIntegralPointTime;
+            time = this.integralPointTime;
 
         // 相加
         this.resultNumber.value = (Number(input) + this.getOffsetParameter(time)).toString();
@@ -59,7 +52,7 @@ export class SuqiqunV1 implements BaseCalcItem {
     /**
      * 字典中区对应时间内密码偏移值
      */
-    private getOffsetParameter(nowIntegralPointTime: number): number  {
+    private getOffsetParameter(nowIntegralPointTime: number): number {
         let disT: string = "0"
         Object.entries(dictionariesV1.t).forEach((i) => {
             if (i[1].indexOf(nowIntegralPointTime) >= 0)

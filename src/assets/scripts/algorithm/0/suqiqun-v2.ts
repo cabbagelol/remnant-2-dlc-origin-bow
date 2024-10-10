@@ -31,7 +31,6 @@ export class SuqiqunV2 implements BaseCalcItem {
         return this;
     }
 
-
     public getInput() {
         return [5, 5, 5, 5]
     }
@@ -39,7 +38,7 @@ export class SuqiqunV2 implements BaseCalcItem {
     /**
      * 计算
      */
-    public getExportation(inputValue: number[] = [0,0,0,0]): string[] {
+    public getExportation(inputValue: number[] = [0, 0, 0, 0]): string[] {
         let input = inputValue.join(''),
             time = this.nowIntegralPointTime;
 
@@ -59,7 +58,7 @@ export class SuqiqunV2 implements BaseCalcItem {
     /**
      * 字典中区对应时间内密码偏移值
      */
-    private getOffsetParameter(nowIntegralPointTime: number): number  {
+    private getOffsetParameter(nowIntegralPointTime: number): number {
         let disT: string = "0"
         Object.entries(dictionariesV1.t).forEach((i) => {
             if (i[1].indexOf(nowIntegralPointTime) >= 0)

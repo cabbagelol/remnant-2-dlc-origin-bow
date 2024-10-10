@@ -10,28 +10,27 @@ import {algorithm} from "./assets/scripts";
 import {useRoute, useRouter} from "vue-router";
 
 const route = useRoute(),
-      router = useRouter();
+    router = useRouter();
 
 route?.query;
 router?.isReady()
 
-let // setting
+let // setting route.query.v ??
     algorithms = algorithm.all,
     useAlgorithm = ref(route.query.a ?? algorithm.default),
-    useAlgorithmCalcVersion = ref(route.query.v ?? 'v1'),
+    useAlgorithmCalcVersion = ref('v1'),
     useSystemNowIntegralPointTime = ref(true),
     useCustomIntegralPointTime = ref(0),
     nowIntegralPointTime = ref(new Date().getHours()),
-    useChat = ref(route.query.c ? Boolean(route.query.c) : false),
+    useChat = ref(route.query.c ? Boolean(route.query.c) : true),
 
     // user input
     inputValueBoxView: Ref<null | any> = ref(null),
-    inputValue = ref([0, 0, 0, 0]),
-
-    outputValue: Ref<number[] | any> = ref([1, 6, 0, 0]);
+    inputValue = ref([0, 0, 0, 0]);
 
 onMounted(() => {
-  onDice()
+  inputValue.value = algorithm.mode(useAlgorithm.value).get(useAlgorithmCalcVersion.value).getInput()
+
   onUpdateTime()
 })
 
@@ -41,33 +40,25 @@ function onUpdateTime() {
   }, 1000)
 }
 
-/**
- * 骰子
- */
-function onDice() {
-  if (!useAlgorithm.value) return;
-
-  inputValue.value = Array.from({length: algorithm.mode(useAlgorithm.value).get(null).config.inputMax}, () => 0);
-
-  getCalcResult();
-}
-
 function onChangeAlgorithm() {
-  if (!useAlgorithm.value) return;
+  if (!useAlgorithm.value && !useAlgorithmCalcVersion.value) return;
 
   router.push({
     path: "/",
     query: {
-      "c": useChat.value.toString(),
-      "v": useAlgorithmCalcVersion.value.toString(),
       "a": useAlgorithm.value,
-      "t": useSystemNowIntegralPointTime ? nowIntegralPointTime.value : useCustomIntegralPointTime.value
     }
   })
 
-  useAlgorithmCalcVersion.value = algorithm.mode(useAlgorithm.value).useDefaultVersion;
+  // 切换算法后初始默认版本
+  // useAlgorithmCalcVersion.value = algorithm.mode(useAlgorithm.value).useDefaultVersion;
 }
 
+function onChangeCustomTime() {
+  useSystemNowIntegralPointTime.value = false;
+
+  getCalcResult()
+}
 
 /**
  * 轮盘触发时间通知计算
@@ -81,21 +72,27 @@ function onRouletteChange() {
 
 function getCalcResult() {
   outputValue.value = algorithm.mode(useAlgorithm.value).get(useAlgorithmCalcVersion.value).init({
-    useSystemNowIntegralPointTime: useSystemNowIntegralPointTime
+    integralPointTime: useSystemNowIntegralPointTime.value ? useSystemNowIntegralPointTime.value : useCustomIntegralPointTime.value,
   }).getExportation()
 }
 
 </script>
 
 <template>
-  <v-app>
+  <v-app class="bg-black">
     <HeaderView></HeaderView>
 
     <v-main class="tool">
+      <div class="h-25 position-relative" style="background: url('https://cdn.remnantgame.com/remnantgame_assets/images/news/desktop/decoration-bg.webp')">
+        <div class="h-25 w-100 position-absolute bottom-0 mb-n9" style="background: url('https://cdn.remnantgame.com/remnantgame_assets/images/jagged-divider.webp')">
+
+        </div>
+      </div>
+
       <v-container>
         <v-row class="mt-5">
           <v-col :sm="12" :md="12" :lg="5" :xl="5">
-            <template v-if="useAlgorithm">
+            <template v-if="useAlgorithm && algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion)">
               <!-- 用户输入轮盘 S -->
               <v-card class="mb-2 d-block" variant="text" min-width="400px">
                 <v-row justify="center" class="roulette-input-box overflow-y-auto mt-8 mb-3 flex-nowrap">
@@ -121,17 +118,16 @@ function getCalcResult() {
                     {{ i }}
                   </RoulettePanel>
                 </v-row>
-
               </v-card>
               <!-- 结果轮盘 E -->
             </template>
             <template v-else>
               <div class="d-flex justify-center align-center fill-height">
-                <v-card class="text-center pa-2" hover>
+                <v-card class="text-center mt-9 pa-5 mb-2 w-100" border link>
                   <v-avatar class="mr-1 mb-2">
-                    <v-icon size="25">mdi-help</v-icon>
+                    <v-icon size="30">mdi-help</v-icon>
                   </v-avatar>
-                  <p class="d-block text-subtitle-2 opacity-40">请先选择需要的算法来解算密码</p>
+                  <p class="d-block text-subtitle-2 opacity-40">请先选择需要的<u>算法</u>以及<u>版本</u>来解算密码</p>
                 </v-card>
               </div>
             </template>
@@ -145,56 +141,64 @@ function getCalcResult() {
                 </v-label>
                 <v-select :items="algorithms"
                           clearable
+                          color="primary"
+                          variant="outlined"
                           placeholder="请选择使用的算法"
                           @update:model-value="onChangeAlgorithm"
                           v-model="useAlgorithm">
                   <template v-slot:selection>
-                    {{ AllCalcInfo[useAlgorithm].title }}
+                    {{ AllCalcInfo[useAlgorithm].title || 'none' }}
                   </template>
                   <template v-slot:item="{ props, item }">
                     <v-list-item v-bind="props" :disabled="AllCalcInfo[item.title].disabled"
-                                 :title="AllCalcInfo[item.title].title"></v-list-item>
+                                 :title="AllCalcInfo[item.title].title">
+                      <template v-slot:prepend>
+                        <v-icon>mdi-function</v-icon>
+                      </template>
+                    </v-list-item>
                   </template>
                 </v-select>
 
                 <p class="text-subtitle-2 opacity-40" v-if="useAlgorithm">
                   {{ AllCalcInfo[useAlgorithm].describe ??= 'none' }}</p>
               </v-col>
-              <v-col :sm="12" :md="6" :lg="6" :xl="6"v-if="useAlgorithm">
+              <v-col :sm="12" :md="6" :lg="6" :xl="6" v-if="useAlgorithm">
                 <v-label class="mb-3">
                   算法版本
-                  <v-chip density="compact" class="ml-2"  v-if="useAlgorithm">{{ algorithm.mode(useAlgorithm).versions.length }}</v-chip>
+                  <v-chip density="compact" class="ml-2" v-if="useAlgorithm">
+                    {{ algorithm.mode(useAlgorithm).versions.length }}
+                  </v-chip>
                 </v-label>
                 <v-select :items="algorithm.mode(useAlgorithm).versions"
+                          color="primary"
+                          variant="outlined"
                           v-model="useAlgorithmCalcVersion">
                   <template v-slot:item="{ props, item }">
                     <v-list-item v-bind="props"
-                                 :title="item.title">
-                      <template v-slot:append>
-                        <v-chip>{{
-                            algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).creationTime || 'none'
-                          }}
-                        </v-chip>
-                      </template>
+                                 :title="item.title"
+                                 :subtitle="algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).creationTime || 'none'">
+
                     </v-list-item>
                   </template>
                 </v-select>
 
-                <p class="text-subtitle-2 opacity-40">
+                <p class="text-subtitle-2 opacity-40" v-if="useAlgorithm && useAlgorithmCalcVersion">
                   {{ AllCalcInfo[useAlgorithm].versions[useAlgorithmCalcVersion].describe ??= 'none' }}
                 </p>
               </v-col>
-              <v-col :sm="12" :md="6" :lg="6" :xl="6" v-if="algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).config.isCustomTime">
+              <v-col :sm="12" :md="6" :lg="6" :xl="6"
+                     v-if="algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion)?.config.isCustomTime">
                 <v-label class="mb-3">
                   <v-icon class="mr-2">mdi-clock-time-eight</v-icon>
                   时间
                 </v-label>
 
                 <div>
-                  <v-btn-toggle wdith="300px"
+                  <v-btn-toggle border wdith="300px"
                                 color="primary" mandatory
-                                v-model="useSystemNowIntegralPointTime" divided>
-                    <v-btn :value="true" width="80px">
+                                @update:model-value="onChangeCustomTime"
+                                v-model="useSystemNowIntegralPointTime">
+                    <v-btn :value="true" width="80px" style="font-size: 16px">
                       {{ nowIntegralPointTime }}
                     </v-btn>
                     <v-btn class="pa-0"
@@ -203,6 +207,7 @@ function getCalcResult() {
                            :disabled="!algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).config.isCustomTime">
                       <v-select :items="Array.from({length: 24}, (e,i) => i)"
                                 v-model="useCustomIntegralPointTime"
+                                @update:focused="onChangeCustomTime"
                                 variant="filled"
                                 width="80px"
                                 density="comfortable"
@@ -228,7 +233,7 @@ function getCalcResult() {
         </v-row>
 
         <!-- fremnant2_dlc_origin_bow-App -->
-        <v-card>
+        <v-card class="mt-5">
           <ins class="adsbygoogle"
                style="display:block"
                data-ad-client="ca-pub-6625226616103631"

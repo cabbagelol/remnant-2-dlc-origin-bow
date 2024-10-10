@@ -1,11 +1,13 @@
 import {SuqiqunAlgorithm} from "./0/"
 import {CowaiiAlgorithm} from "./1/"
+import {UnwrapRef} from "vue";
+import {LocationQueryValue} from "vue-router";
 
 export default class MainAlgorithm {
-    default = 'cowaii'
+    default = 'suqiqun'
     all: string[] = ['suqiqun', 'cowaii']
 
-    mode(type: string = this.default) {
+    mode(type?: UnwrapRef<string | LocationQueryValue[]>) {
         switch (type) {
             case "suqiqun":
                 return this.suqiqun;
