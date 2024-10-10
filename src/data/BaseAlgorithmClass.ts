@@ -1,4 +1,3 @@
-import { log } from "console";
 import { BaseAlgorithm } from "./BaseAlgorithm";
 import { BaseCalcItem } from "./BaseCalcClass";
 
@@ -18,11 +17,11 @@ export class Algorithm implements BaseAlgorithm {
     /**
      * 获取算法
      * @param useVersion 如果提供指定版本，则从算法版本列表查找对应版本的计算函数执行
-     * @returns 
+     * @returns
      */
     public get (useVersion?: string) {
         let getDefaultItem: BaseCalcItem = this.list[0];
-        if (!useVersion && this.list.filter(i => i.version == this.useDefaultVersion).length <= 0) 
+        if (!useVersion && this.list.filter(i => i.version == this.useDefaultVersion).length <= 0)
             return getDefaultItem;
 
         try {

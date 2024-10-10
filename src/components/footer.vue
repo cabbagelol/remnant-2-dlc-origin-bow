@@ -1,5 +1,12 @@
 <template>
   <v-divider/>
+  <v-container class="pa-0">
+    <v-btn tile variant="text" href="https://github.com/cabbagelol/remnant-2-dlc-origin-bow" target="_blank">
+      github.com
+      <v-icon>mdi-share</v-icon>
+    </v-btn>
+  </v-container>
+  <v-divider/>
   <v-footer tile class="text-center">
     <v-container class="footer pa-0">
       <svg height="50" xmlns="http://www.w3.org/2000/svg" width="50">
@@ -34,3 +41,5 @@
   display: flex;
 }
 </style>
+<script setup lang="ts">
+</script>
