@@ -1,10 +1,10 @@
 <script setup lang="ts">
-
+import bg from '/src/assets/images/decoration-bg.png'
 </script>
 
 <template>
   <div class="banner banner-height position-relative overflow-hidden">
-    <v-img src="../assets/images/decoration-bg.png" cover height="180px" alt="banner-bg"/>
+    <v-img :src="bg" cover height="100vh" alt="banner-bg"/>
     <div class="banner-bottom w-100 position-absolute bottom-0">
       <img alt="banner" src="../assets/images/jagged-divider.webp"/>
     </div>
