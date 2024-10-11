@@ -15,7 +15,7 @@ let props = defineProps({
   value: Number | undefined
 })
 
-watch(() => props.value, (newValue, oldValue: any) => {
+watch(() => props.value, (newValue) => {
   n_value.value = newValue;
 })
 
@@ -79,10 +79,6 @@ defineExpose({value})
 
 .roulette-col.n {
   background: -moz-visitedhyperlinktext;
-}
-
-.roulette-col.y .v-btn {
-  visibility: hidden;
 }
 
 .roulette-col .img {
