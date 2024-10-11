@@ -8,9 +8,16 @@ import RoulettePanel from "@/components/RoulettePanel.vue";
 
 <template>
   <v-container>
+    <v-row>
+      <v-spacer/>
+      <span>
+        (*╹▽╹*)
+      </span>
+    </v-row>
     <div v-for="(i, index) in algorithm.list" :key="index" class="mb-5">
       <v-card-title class="ml-n4 text-h2">
         {{ i.name }}
+        <v-btn density="compact" :to="{name: 'main', query: {a: i.name}}">使用</v-btn>
       </v-card-title>
       <v-label class="mb-3">
         {{ AllCalcInfo[i.name]?.describe }}
@@ -38,7 +45,7 @@ import RoulettePanel from "@/components/RoulettePanel.vue";
 
               <div>
                 <v-row justify="center">
-                  <v-col v-for="(o, oIndex) in j.getExportation()" :key="oIndex" cols="3">
+                  <v-col v-for="(o, oIndex) in j.getExportation(j.getInput())" :key="oIndex" cols="3">
                     <RouterView :value="o"/>
                   </v-col>
                 </v-row>
