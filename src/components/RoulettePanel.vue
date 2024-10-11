@@ -54,7 +54,7 @@ defineExpose({value})
           <v-icon>mdi-minus</v-icon>
         </v-btn>
         <v-divider vertical></v-divider>
-        <v-img :src="numberAsImage[value]" :alt="value" :title="value" cover alt="value" class="img" width="45" height="70px"/>
+        <v-img :src="numberAsImage[value]" :title="value" cover alt="value" class="img" width="45" height="70px"/>
         <v-divider vertical></v-divider>
         <v-btn icon density="compact" @click="add" :disabled="props.type !== 'write' || value >= valueMax">
           <v-icon>mdi-plus</v-icon>

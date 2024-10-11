@@ -8,12 +8,6 @@ import RouterView from "@/components/RoulettePanel.vue"
 
 <template>
   <v-container>
-    <v-row>
-      <v-spacer/>
-      <span>
-        (*╹▽╹*)
-      </span>
-    </v-row>
     <div v-for="(i, index) in algorithm.list" :key="index" class="mb-5">
       <v-card-title class="ml-n4 text-h2">
         {{ AllCalcInfo[i.name]?.title }}
@@ -21,23 +15,23 @@ import RouterView from "@/components/RoulettePanel.vue"
       </v-card-title>
       <p class="text-subtitle-1"><b>{{ i.name.toUpperCase() }}</b></p>
 
-      <v-label class="mb-10">
+      <v-label class="mb-10 text-wrap">
         {{ AllCalcInfo[i.name]?.describe }}
       </v-label>
-      <div v-for="(j, jIndex) in i.list" :key="jIndex" class="mb-10">
+      <v-card v-for="(j, jIndex) in i.list" :key="jIndex" class="mb-10 pa-5" link>
         <v-row>
-          <v-col :sm="12" :lg="3" :offset-sm="0" :offset-lg="1">
-            <v-label class="mb-3 text-h6">
+          <v-col :sm="12" :md="12" :lg="3" :offset-sm="0" :offset-md="0" :offset-lg="1">
+            <v-label class="mt-8 mb-3 text-h6">
               <v-icon class="mr-1">mdi-function</v-icon>
               <b>{{ j.version }}</b>
             </v-label>
-            <p class="mb-3"><v-chip density="compact" variant="flat">{{ j.creationTime }}</v-chip></p>
-            <p>{{ AllCalcInfo[i.name].versions[j.version].describe }}</p>
+            <p class="mb-3"><v-chip density="compact" variant="tonal">{{ j.creationTime }}</v-chip></p>
+            <p class="text-wrap">{{ AllCalcInfo[i.name].versions[j.version].describe }}</p>
           </v-col>
 
-          <v-col :sm="12" :lg="8" class="position-relative">
-            <v-row justify="end" class="mt-5">
-              <div>
+          <v-col :sm="12" :md="12" :lg="8" :xl="8" cols="12" class="position-relative">
+            <v-row justify="center" justify-lg="end" class="mt-5 pr-5">
+              <div class="overflow-y-auto">
                 <v-row justify="center" align="stretch">
                   <v-col v-for="(o, oIndex) in j.getInput()" :key="oIndex" cols="3">
                     <RouterView
@@ -47,7 +41,7 @@ import RouterView from "@/components/RoulettePanel.vue"
                 </v-row>
               </div>
 
-              <div>
+              <div class="overflow-y-auto">
                 <v-row justify="center">
                   <v-col v-for="(o, oIndex) in j.getExportation(j.getInput())" :key="oIndex" cols="3">
                     <RouterView :value="o"/>
@@ -62,7 +56,7 @@ import RouterView from "@/components/RoulettePanel.vue"
             </div>
           </v-col>
         </v-row>
-      </div>
+      </v-card>
       <v-divider/>
     </div>
 

@@ -120,7 +120,7 @@ function getCalcResult() {
           </div>
         </template>
       </v-col>
-      <v-col :sm="12" :md="12" :lg="7" :xl="7">
+      <v-col :sm="12" :md="12" :lg="7" :xl="7" :cols="12">
         <v-row>
           <v-col :sm="12" :md="6" :lg="6" :xl="6">
             <v-label class="mb-3">
@@ -154,7 +154,7 @@ function getCalcResult() {
             <p class="text-subtitle-2 opacity-40" v-if="useAlgorithm">
               {{ AllCalcInfo[useAlgorithm].describe ??= 'none' }}</p>
           </v-col>
-          <v-col :sm="12" :md="6" :lg="6" :xl="6" v-if="useAlgorithm">
+          <v-col :sm="12" :md="6" :lg="6" :xl="6" :cols="12" v-if="useAlgorithm">
             <v-label class="mb-3 w-100">
               <v-row>
                 <v-col>
@@ -188,7 +188,7 @@ function getCalcResult() {
               {{ AllCalcInfo[useAlgorithm].versions[useAlgorithmCalcVersion].describe ??= 'none' }}
             </p>
           </v-col>
-          <v-col :sm="12" :md="6" :lg="6" :xl="6"
+          <v-col :sm="12" :md="6" :lg="6" :xl="6" :cols="12"
                  v-if="algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion)?.config.isCustomTime">
             <v-label class="mb-3">
               <v-icon class="mr-2">mdi-clock-time-eight</v-icon>

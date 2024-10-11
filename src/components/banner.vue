@@ -3,19 +3,34 @@
 </script>
 
 <template>
-  <div class="banner banner-height position-relative" style="background: url('https://cdn.remnantgame.com/remnantgame_assets/images/news/desktop/decoration-bg.webp')">
-    <div class="banner-bottom w-100 position-absolute bottom-0" style="background: url('https://cdn.remnantgame.com/remnantgame_assets/images/jagged-divider.webp')">
-
+  <div class="banner banner-height position-relative overflow-hidden">
+    <img src="../assets/images/decoration-bg.png" alt="banner-bg"/>
+    <div class="banner-bottom w-100 position-absolute bottom-0">
+      <img alt="banner" src="../assets/images/jagged-divider.webp"></img>
     </div>
   </div>
 </template>
 
 <style scoped>
+.banner {
+  user-select: none;
+}
+
+.banner:after {
+  content: "";
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .banner-height {
   height: 180px;
 }
 
 .banner-bottom {
-  height: 30px;
+  height: 23px;
 }
 </style>

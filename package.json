@@ -15,6 +15,7 @@
     "roboto-fontface": "*",
     "vue": "^3.4.31",
     "vue-disqus": "^5.1.0",
+    "vue3-google-adsense": "^0.1.2",
     "vuetify": "^3.6.11"
   },
   "devDependencies": {
