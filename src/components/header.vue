@@ -8,6 +8,9 @@
         <v-btn variant="text" to="/">
           首页
         </v-btn>
+        <v-btn variant="text" to="showAllCalc">
+          所以算法
+        </v-btn>
         <v-spacer></v-spacer>
         <v-btn variant="flat" href="https://github.com/cabbagelol/remnant-2-dlc-origin-bow" target="_blank">
           github.com

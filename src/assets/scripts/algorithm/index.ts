@@ -6,6 +6,7 @@ import {LocationQueryValue} from "vue-router";
 export default class MainAlgorithm {
     default = 'suqiqun'
     all: string[] = ['suqiqun', 'cowaii']
+    list = [new SuqiqunAlgorithm(), new CowaiiAlgorithm()]
 
     mode(type?: UnwrapRef<string | LocationQueryValue[]>) {
         switch (type) {
@@ -17,6 +18,6 @@ export default class MainAlgorithm {
         }
     }
 
-    suqiqun: SuqiqunAlgorithm = new SuqiqunAlgorithm();
-    cowaii: CowaiiAlgorithm = new CowaiiAlgorithm();
+    suqiqun: SuqiqunAlgorithm = this.list[0];
+    cowaii: CowaiiAlgorithm = this.list[1];
 }

@@ -9,7 +9,7 @@ import {SuqiqunV2} from "./suqiqun-v2"
 import {ref} from "vue";
 
 export class SuqiqunAlgorithm extends Algorithm implements BaseAlgorithm {
-    name: string = "SUQIQUN";
+    name: string = "suqiqun";
     useDefaultVersion: string = "v2";
     currentVersionValue = ref("v2");
     list: BaseCalcItem[] = [
