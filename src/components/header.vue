@@ -5,7 +5,7 @@
         <v-btn icon>
           <v-img src="/header_logo.webp" alt="header" width="15px" height="25px"/>
         </v-btn>
-        <div class="d-block">
+        <div class="d-block ml-5">
           <v-btn variant="text" to="/">
             首页
           </v-btn>
@@ -17,9 +17,9 @@
           </v-btn>
         </div>
         <v-spacer></v-spacer>
-        <v-btn variant="flat" href="https://github.com/cabbagelol/remnant-2-dlc-origin-bow" target="_blank">
+        <v-btn variant="tonal" href="https://github.com/cabbagelol/remnant-2-dlc-origin-bow" target="_blank">
           github.com
-          <v-icon>mdi-share</v-icon>
+          <v-icon class="ml-2">mdi-open-in-new</v-icon>
         </v-btn>
       </v-row>
     </v-container>

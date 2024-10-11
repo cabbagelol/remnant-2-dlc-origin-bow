@@ -20,6 +20,14 @@ export default createVuetify({
   },
   theme: {
     defaultTheme: 'dark',
+    themes: {
+      dark: {
+        colors: {
+          color: 'rgba(235, 218, 174, 1)',
+          primary: 'rgba(235, 218, 174, 1)'
+        }
+      }
+    }
   },
   components: {...components, },
   directives,

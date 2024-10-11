@@ -63,7 +63,7 @@ defineExpose({value})
     </v-card>
 
     <div class="text-center mt-1">
-      <v-chip density="compact" variant="tonal" border class="ml-auto mr-auto">{{ value }}</v-chip>
+      <v-chip color="primary" density="compact" variant="tonal" border class="ml-auto mr-auto">{{ value }}</v-chip>
     </div>
   </div>
 </template>
