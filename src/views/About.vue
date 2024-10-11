@@ -19,6 +19,14 @@
       <li>📮 nickmiku@foxmail.com</li>
       <li>🌏 cabbagelol.net</li>
     </ol>
+
+    <v-divider class="mt-10"/>
+    <h1 class="font-weight-bold text-h5 mt-10 mb-3">其他作品 (骄傲)</h1>
+    <ol class="ml-5">
+      <li><b>人间地狱计算器:</b> https://hll-gun-calc.app-document.cabbagelol.net</li>
+      <li><b>BFBAN APP:</b> https://bfban-app.cabbagelol.net</li>
+    </ol>
+
   </v-container>
 </template>
 
