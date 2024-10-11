@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import RoulettePanel from "./components/RoulettePanel.vue"
-import ChatView from "./components/chat.vue"
 import HeaderView from "./components/header.vue"
 import FooterView from "./components/footer.vue"
+import BannerView from "@/components/banner.vue";
+import AdsView from "@/components/ads.vue"
 import AllCalcInfo from "/public/calcVersion.json";
 
 import {onMounted, Ref, ref} from "vue";
@@ -83,18 +84,14 @@ function getCalcResult() {
     <HeaderView></HeaderView>
 
     <v-main class="tool">
-      <div class="h-25 position-relative" style="background: url('https://cdn.remnantgame.com/remnantgame_assets/images/news/desktop/decoration-bg.webp')">
-        <div class="h-25 w-100 position-absolute bottom-0 mb-n9" style="background: url('https://cdn.remnantgame.com/remnantgame_assets/images/jagged-divider.webp')">
-
-        </div>
-      </div>
+      <BannerView/>
 
       <v-container>
         <v-row class="mt-5">
           <v-col :sm="12" :md="12" :lg="5" :xl="5">
             <template v-if="useAlgorithm && algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion)">
               <!-- 用户输入轮盘 S -->
-              <v-card class="mb-2 d-block" variant="text" min-width="400px">
+              <v-card class="mb-2 d-block" variant="text">
                 <v-row justify="center" class="roulette-input-box overflow-y-auto mt-8 mb-3 flex-nowrap">
                   <RoulettePanel
                       v-for="(i,index) in algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).getInput()"
@@ -138,6 +135,10 @@ function getCalcResult() {
                 <v-label class="mb-3">
                   <v-icon class="mr-1">mdi-function</v-icon>
                   算法 (计算方式)
+
+                  <v-avatar variant="tonal" density="compact" size="19" class=" ml-2 mb-n1 mt-n1"  v-tooltip="'不同的算法方式以及版本都会计算出不同结果，由于各项因素会导致最终结果可能不精准，因此用户可以尝试选择不同算法版本来访问大门'">
+                    <v-icon size="15">mdi-help</v-icon>
+                  </v-avatar>
                 </v-label>
                 <v-select :items="algorithms"
                           clearable
@@ -163,11 +164,21 @@ function getCalcResult() {
                   {{ AllCalcInfo[useAlgorithm].describe ??= 'none' }}</p>
               </v-col>
               <v-col :sm="12" :md="6" :lg="6" :xl="6" v-if="useAlgorithm">
-                <v-label class="mb-3">
-                  算法版本
-                  <v-chip density="compact" class="ml-2" v-if="useAlgorithm">
-                    {{ algorithm.mode(useAlgorithm).versions.length }}
-                  </v-chip>
+                <v-label class="mb-3 w-100">
+                  <v-row>
+                    <v-col>
+                      算法版本
+                      <v-avatar variant="tonal" density="compact" size="19" class=" ml-2 mb-n1 mt-n1"  v-tooltip="'算法内提供版本选择，不同版本都有差异，可以通过下方描述了解'">
+                        <v-icon size="15">mdi-help</v-icon>
+                      </v-avatar>
+                    </v-col>
+                    <v-spacer></v-spacer>
+                    <v-col class="text-right">
+                      <v-chip density="compact" class="ml-2" v-if="useAlgorithm">
+                        {{ algorithm.mode(useAlgorithm).versions.length }}
+                      </v-chip>
+                    </v-col>
+                  </v-row>
                 </v-label>
                 <v-select :items="algorithm.mode(useAlgorithm).versions"
                           color="primary"
@@ -218,7 +229,7 @@ function getCalcResult() {
                   <span class="ml-5">点</span>
                 </div>
               </v-col>
-              <v-col>
+              <v-col v-if="false">
                 <v-label class="mb-0">
                   <v-icon class="mr-2">mdi-chat</v-icon>
                   评论
@@ -232,18 +243,7 @@ function getCalcResult() {
           </v-col>
         </v-row>
 
-        <!-- fremnant2_dlc_origin_bow-App -->
-        <v-card class="mt-5">
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="ca-pub-6625226616103631"
-               data-ad-slot="1990844951"
-               data-ad-format="auto"
-               data-full-width-responsive="true"></ins>
-        </v-card>
-
-        <ChatView v-if="useChat"/>
-
+        <AdsView/>
       </v-container>
       <FooterView/>
     </v-main>
@@ -253,30 +253,5 @@ function getCalcResult() {
 <style>
 .roulette-input-box {
   display: flex;
-}
-
-.custom-time-input::-webkit-calendar-picker-indicator {
-  display: none;
-  outline: none;
-}
-
-.custom-time-input {
-  appearance: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  padding: 0;
-  background-color: transparent;
-  border: none;
-  font-size: initial;
-  font-family: inherit;
-  cursor: pointer;
-}
-
-.custom-time-input::before {
-  content: attr(value);
-}
-
-.custom-time-input:focus::before {
-  outline: none;
 }
 </style>

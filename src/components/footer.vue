@@ -21,7 +21,7 @@
       </svg>
 
       <v-btn icon density="comfortable" href="https://www.bilibili.com/video/BV1gfx2egETJ" target="_blank" class="overflow-hidden">
-        <v-img height="40" width="40" src="/user-suqiqun.jpg"></v-img>
+        <v-img height="40" width="40" src="/user-suqiqun.jpg" alt="footer-user"></v-img>
       </v-btn>
     </v-container>
   </v-footer>

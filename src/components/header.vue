@@ -3,7 +3,7 @@
     <v-container>
       <v-row align="center">
         <v-btn icon>
-          <v-img src="/header_logo.webp" width="15px" height="25px"/>
+          <v-img src="/header_logo.webp" alt="header" width="15px" height="25px"/>
         </v-btn>
         <v-btn variant="text" to="/">
           首页
