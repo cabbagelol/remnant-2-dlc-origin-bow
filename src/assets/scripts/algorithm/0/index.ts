@@ -8,8 +8,8 @@ import {SuqiqunV1} from "./suqiqun-v1"
 import {SuqiqunV2} from "./suqiqun-v2"
 import {ref} from "vue";
 
-export class SuqiqunAlgorithm extends Algorithm implements BaseAlgorithm {
-    name: string = "suqiqun";
+export class SujiucchuanAlgorithm extends Algorithm implements BaseAlgorithm {
+    name: string = "sujiucchuan";
     useDefaultVersion: string = "v2";
     currentVersionValue = ref("v2");
     list: BaseCalcItem[] = [
