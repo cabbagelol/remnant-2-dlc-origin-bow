@@ -4,7 +4,7 @@
 
 <template>
   <div class="banner banner-height position-relative overflow-hidden">
-    <v-img src="/src/assets/images/decoration-bg.png" cover height="180px" alt="banner-bg"/>
+    <v-img src="../assets/images/decoration-bg.png" cover height="180px" alt="banner-bg"/>
     <div class="banner-bottom w-100 position-absolute bottom-0">
       <img alt="banner" src="../assets/images/jagged-divider.webp"/>
     </div>
