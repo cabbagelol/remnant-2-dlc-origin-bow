@@ -57,7 +57,7 @@ function onChangeAlgorithm(newAlgorithm: string) {
   // useAlgorithmCalcVersion.value = algorithm.mode(useAlgorithm.value).useDefaultVersion;
 }
 
-function onChangeAlgorithmVersion (newVersion) {
+function onChangeAlgorithmVersion(newVersion) {
   router.push({
     path: "/",
     query: {
@@ -133,8 +133,8 @@ function onRouletteChange(value: any, type: string) {
                   :value="i"
                   :type="algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).config.isInput ? 'write' : 'read'"
                   ref="inputValueBoxView"
+                  @ready="onRouletteChange"
                   @change="onRouletteChange">
-                {{ i }}
               </RoulettePanel>
             </v-row>
             <!-- 用户输入轮盘 E -->
@@ -143,14 +143,13 @@ function onRouletteChange(value: any, type: string) {
             <v-row justify="center" class="roulette-input-box overflow-y-auto flex-nowrap">
               <RoulettePanel
                   v-for="(i,index) in algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).getExportation(inputValue)"
-                  :type="algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).config.isExportation ? 'write' : 'read'"
                   :key="index"
+                  :type="algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).config.isExportation ? 'write' : 'read'"
                   :value="i">
-                {{ i }}
               </RoulettePanel>
             </v-row>
+            <!-- 结果轮盘 E -->
           </v-card>
-          <!-- 结果轮盘 E -->
         </template>
         <template v-else>
           <div class="d-flex justify-center align-center fill-height">
@@ -230,7 +229,8 @@ function onRouletteChange(value: any, type: string) {
               </template>
             </v-select>
 
-            <p class="text-subtitle-2 opacity-40" v-if="useAlgorithm && useAlgorithmCalcVersion && AllCalcInfo[useAlgorithm].verisons">
+            <p class="text-subtitle-2 opacity-40"
+               v-if="useAlgorithm && useAlgorithmCalcVersion && AllCalcInfo[useAlgorithm].verisons">
               {{ AllCalcInfo[useAlgorithm].versions[useAlgorithmCalcVersion].describe ??= 'none' }}
             </p>
           </v-col>

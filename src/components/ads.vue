@@ -43,13 +43,6 @@ export default defineComponent({
         data-theme="dark"
         fullWidthResponsive="true"
         format="auto"/>
-
-    <!--    <ins class="adsbygoogle"-->
-    <!--         style="display:inline-block"-->
-    <!--         data-ad-client="ca-pub-6625226616103631"-->
-    <!--         data-ad-slot="1990844951"-->
-    <!--         data-ad-format="auto"-->
-    <!--         data-full-width-responsive="true"></ins>-->
   </v-card>
 </template>
 

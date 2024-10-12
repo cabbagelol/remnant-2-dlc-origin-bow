@@ -77,10 +77,10 @@ async function copyToClipboard(i, j) {
           <v-col :sm="12" :md="12" :lg="8" :xl="8" cols="12" class="position-relative">
             <v-row justify="center" justify-lg="end" class="mt-5 pr-5">
               <div class="overflow-x-auto overflow-y-hidden">
-                <v-row justify="center" >
+                <v-row justify="center" align="center" no-gutters>
                   <v-col v-for="(o, oIndex) in j.getInput()" :key="oIndex" cols="3">
                     <RouterView
-                        @reday="(value: any) => setRMap(i,j,oIndex,value)"
+                        @ready="(value: any) => setRMap(i,j,oIndex,value)"
                         @change="(value: any) => setRMap(i,j,oIndex,value)"
                         :type="j.config.isInput ? 'write' : 'read'"
                         :value="o"/>
@@ -89,7 +89,7 @@ async function copyToClipboard(i, j) {
               </div>
 
               <div class="overflow-x-auto overflow-y-hidden" v-if="inputMaps[i.name]">
-                <v-row justify="center">
+                <v-row justify="center" align="center" no-gutters>
                   <v-col v-for="(o, oIndex) in j.getExportation(inputMaps[i.name][j.version])" :key="oIndex" cols="3">
                     <RouterView :value="o"/>
                   </v-col>
