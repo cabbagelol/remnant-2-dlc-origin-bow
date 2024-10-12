@@ -1,46 +1,58 @@
 <script setup lang="ts">
+import {VNumberInput} from 'vuetify/labs/VNumberInput'
 
 import {computed, onMounted, ref, watch} from "vue";
+import {RouletteType} from "@/data/RouletteType.ts";
+import {storeRouletteConfig} from "@/state";
 
-const valueMax = 9,
-    valueMin = 0;
+const store = storeRouletteConfig(),
+    inputMin = 0,
+    inputMax = 9;
 
 let n_value = ref(0),
     value = computed(() => n_value.value),
-    numberAsImage: [] = [],
-    $emit = defineEmits(['change']);
+    numberAsImage: string[] = [],
+    $emit = defineEmits(['change', 'reday']);
 
 let props = defineProps({
   type: String,
-  value: Number | undefined
+  value: Number | undefined,
 })
 
 watch(() => props.value, (newValue) => {
   n_value.value = newValue;
 })
 
-onMounted(() => {
-  loaddata();
+watch(() => n_value.value, () => {
+  onNotificationValue()
 })
 
-async function loaddata() {
+onMounted(() => {
+  loadData();
+
+  $emit('reday', Number(n_value.value))
+})
+
+async function loadData() {
   n_value.value = props.value;
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < inputMax + 1; i++) {
     numberAsImage.push(`/images/${i}.png`)
   }
 }
 
 function add() {
-  if (n_value.value >= 9) return;
+  if (n_value.value >= inputMax) return;
   n_value.value += 1;
-  $emit('change', n_value.value)
 }
 
 function rem() {
-  if (n_value.value <= 0) return;
+  if (n_value.value <= inputMin) return;
   n_value.value -= 1;
-  $emit('change', n_value.value)
+}
+
+function onNotificationValue() {
+  $emit('change', Number(n_value.value))
 }
 
 defineExpose({value})
@@ -48,19 +60,46 @@ defineExpose({value})
 
 <template>
   <div class="pb-4">
-    <v-card border elevation="0" class="roulette-col" :class="props.type !== 'write' ? 'y':'n'">
-      <v-btn-group style="height: 70px;" variant="tonal" color="primary">
-        <v-btn icon density="compact" @click="rem" :disabled="props.type !== 'write' || value <= valueMin">
-          <v-icon>mdi-minus</v-icon>
-        </v-btn>
+    <template v-if="store.type == RouletteType.Standard">
+      <v-card border elevation="0" class="roulette-col" :class="props.type !== 'write' ? 'y':'n'">
+        <v-btn-group style="height: 70px;" variant="tonal" color="primary">
+          <v-btn icon density="compact" @click="rem" :disabled="props.type !== 'write' || value <= inputMin">
+            <v-icon>mdi-minus</v-icon>
+          </v-btn>
+          <v-divider vertical></v-divider>
+          <v-img :src="numberAsImage[value]" :title="value" cover alt="value" class="img" width="45" height="70px"/>
+          <v-divider vertical></v-divider>
+          <v-btn icon density="compact" @click="add" :disabled="props.type !== 'write' || value >= inputMax">
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </v-btn-group>
+      </v-card>
+    </template>
+    <template v-if="store.type == RouletteType.Extend">
+      <v-card border class="roulette-col">
+        <v-img :src="numberAsImage[value]" :title="value" alt="value" class="img" width="60" height="70px"/>
         <v-divider vertical></v-divider>
-        <v-img :src="numberAsImage[value]" :title="value" cover alt="value" class="img" width="45" height="70px"/>
-        <v-divider vertical></v-divider>
-        <v-btn icon density="compact" @click="add" :disabled="props.type !== 'write' || value >= valueMax">
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-      </v-btn-group>
-    </v-card>
+        <v-number-input
+            tile
+            :disabled="props.type !== 'write'"
+            :min="inputMin"
+            :max="inputMax"
+            style="height: 85px"
+            hide-input
+            hide-details
+            hide-spin-buttons
+            class="mr-n0 mb-n8"
+            variant="filled"
+            controlVariant="stacked"
+            v-model="n_value">
+        </v-number-input>
+      </v-card>
+    </template>
+    <template>
+      <v-card>
+        XD
+      </v-card>
+    </template>
 
     <div class="text-center mt-1">
       <v-chip color="primary" density="compact" variant="tonal" border class="ml-auto mr-auto">{{ value }}</v-chip>
@@ -69,9 +108,10 @@ defineExpose({value})
 </template>
 
 <style scoped>
-
 .roulette-col {
   user-select: none;
+  user-drag: none;
+  resize: none;
   display: flex;
   margin: 0 5px;
   border-radius: 5px;

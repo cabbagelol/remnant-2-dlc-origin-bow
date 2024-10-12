@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <v-container class="mb-10" min-height="calc(100vh - 180px)">
+  <v-container max-width="1200" class="mb-10" min-height="calc(100vh - 180px)">
     <h1 class="font-weight-bold text-h2 mb-6 text-primary">关于程序</h1>
     <p>
       本程序收集由网络提供不同解谜算法,开发者也应算法提供者收益，因此开发此程序提供其他玩家。任何意见或是反馈都可以联系B站菜萌。

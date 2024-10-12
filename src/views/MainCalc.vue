@@ -6,17 +6,21 @@ import AllCalcInfo from "/public/calcVersion.json";
 import {onMounted, Ref, ref} from "vue";
 import {algorithm} from "@/assets/scripts";
 import {useRoute, useRouter} from "vue-router";
+import {storeRouletteConfig} from "@/state";
+import {RouletteType} from "@/data/RouletteType.ts";
 
-const route = useRoute(),
-    router = useRouter();
-
-route?.query;
-router?.isReady()
+const store = storeRouletteConfig(),
+    route = useRoute(),
+    router = useRouter(),
+    AllStyleConfig = {
+      'Standard': '样式一',
+      'Extend': '样式二'
+    };
 
 let // setting route.query.v ??
     algorithms = algorithm.all,
-    useAlgorithm = ref(route.query.a ?? algorithm.default),
-    useAlgorithmCalcVersion = ref('v1'),
+    useAlgorithm = ref(route.query.a || algorithm.default),
+    useAlgorithmCalcVersion = ref(route.query.v || 'v1'),
     useSystemNowIntegralPointTime = ref(true),
     useCustomIntegralPointTime = ref(0),
     nowIntegralPointTime = ref(new Date().getHours()),
@@ -54,8 +58,6 @@ function onChangeAlgorithm() {
 
 function onChangeCustomTime() {
   useSystemNowIntegralPointTime.value = false;
-
-  getCalcResult()
 }
 
 /**
@@ -65,25 +67,55 @@ function onRouletteChange() {
   for (let index = 0; index < algorithm.mode(useAlgorithm.value).get(useAlgorithmCalcVersion.value).config.inputMax; index++) {
     inputValue.value[index] = inputValueBoxView.value[index].value
   }
-  getCalcResult();
 }
-
-function getCalcResult() {
-  outputValue.value = algorithm.mode(useAlgorithm.value).get(useAlgorithmCalcVersion.value).init({
-    integralPointTime: useSystemNowIntegralPointTime.value ? useSystemNowIntegralPointTime.value : useCustomIntegralPointTime.value,
-  }).getExportation()
-}
-
 </script>
 
 <template>
-  <v-container>
+  <v-container max-width="1200">
     <v-row class="mt-5">
       <v-col :sm="12" :md="12" :lg="5" :xl="5">
+        <v-row>
+          <v-spacer/>
+          <v-menu>
+            <template v-slot:activator="{ props }">
+              <v-btn
+                  icon
+                  class="mr-5"
+                  density="comfortable"
+                  variant="plain"
+                  color="primary"
+                  v-bind="props">
+                <v-icon>mdi-dots-horizontal</v-icon>
+              </v-btn>
+            </template>
+            <v-list @update:selected="store.onChangeConfig">
+              <v-list-item
+                  v-for="(item, index) in Object.values(RouletteType)"
+                  :key="index"
+                  :class="[
+                      store.type == item ? 'bg-primary' : ''
+                  ]"
+                  :value="item">
+
+                <v-list-item-title>
+                  <v-row>
+                    <v-col>
+                      {{ AllStyleConfig[item] }}
+                    </v-col>
+                    <v-col>
+                      <v-icon v-if="item == store.type" class="ml-4">mdi-check</v-icon>
+                    </v-col>
+                  </v-row>
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-row>
+
         <template v-if="useAlgorithm && algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion)">
           <!-- 用户输入轮盘 S -->
           <v-card class="mb-2 d-block" variant="text">
-            <v-row justify="center" class="roulette-input-box overflow-y-auto mt-8 mb-3 flex-nowrap">
+            <v-row justify="center" class="roulette-input-box overflow-y-auto mt-6 mb-3 flex-nowrap">
               <RoulettePanel
                   v-for="(i,index) in algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).getInput()"
                   :key="index"
@@ -127,7 +159,8 @@ function getCalcResult() {
               <v-icon class="mr-1">mdi-function</v-icon>
               算法 (计算方式)
 
-              <v-avatar variant="tonal" density="compact" size="19" class=" ml-2 mb-n1 mt-n1"  v-tooltip="'不同的算法方式以及版本都会计算出不同结果，由于各项因素会导致最终结果可能不精准，因此用户可以尝试选择不同算法版本来访问大门'">
+              <v-avatar variant="tonal" density="compact" size="19" class=" ml-2 mb-n1 mt-n1"
+                        v-tooltip="'不同的算法方式以及版本都会计算出不同结果，由于各项因素会导致最终结果可能不精准，因此用户可以尝试选择不同算法版本来访问大门'">
                 <v-icon size="15">mdi-help</v-icon>
               </v-avatar>
             </v-label>
@@ -159,7 +192,8 @@ function getCalcResult() {
               <v-row>
                 <v-col>
                   算法版本
-                  <v-avatar variant="tonal" density="compact" size="19" class=" ml-2 mb-n1 mt-n1"  v-tooltip="'算法内提供版本选择，不同版本都有差异，可以通过下方描述了解'">
+                  <v-avatar variant="tonal" density="compact" size="19" class=" ml-2 mb-n1 mt-n1"
+                            v-tooltip="'算法内提供版本选择，不同版本都有差异，可以通过下方描述了解'">
                     <v-icon size="15">mdi-help</v-icon>
                   </v-avatar>
                 </v-col>
@@ -184,7 +218,7 @@ function getCalcResult() {
               </template>
             </v-select>
 
-            <p class="text-subtitle-2 opacity-40" v-if="useAlgorithm && useAlgorithmCalcVersion">
+            <p class="text-subtitle-2 opacity-40" v-if="useAlgorithm && useAlgorithmCalcVersion && AllCalcInfo[useAlgorithm].verisons">
               {{ AllCalcInfo[useAlgorithm].versions[useAlgorithmCalcVersion].describe ??= 'none' }}
             </p>
           </v-col>
@@ -234,7 +268,7 @@ function getCalcResult() {
       </v-col>
     </v-row>
 
-    <AdsView/>
+    <AdsView id="0"/>
   </v-container>
 </template>
 

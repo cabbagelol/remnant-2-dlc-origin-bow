@@ -5,7 +5,7 @@ import BannerView from "@/components/banner.vue";
 </script>
 
 <template>
-  <v-app class="bg-black">
+  <v-app full-height class="bg-black">
     <HeaderView></HeaderView>
 
     <v-main class="tool">

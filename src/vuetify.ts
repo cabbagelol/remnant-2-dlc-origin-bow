@@ -9,26 +9,27 @@ import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 
 // Composables
-import { createVuetify } from 'vuetify'
+import {createVuetify} from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
-  icons: {
-    defaultSet: 'mdi',
-  },
-  theme: {
-    defaultTheme: 'dark',
-    themes: {
-      dark: {
-        colors: {
-          color: 'rgba(235, 218, 174, 1)',
-          primary: 'rgba(235, 218, 174, 1)'
+    icons: {
+        defaultSet: 'mdi',
+    },
+    theme: {
+        defaultTheme: 'dark',
+        themes: {
+            dark: {
+                dark: true,
+                colors: {
+                    color: 'rgba(235, 218, 174, 1)',
+                    primary: 'rgba(235, 218, 174, 1)'
+                },
+            }
         }
-      }
-    }
-  },
-  components: {...components, },
-  directives,
+    },
+    components: {...components,},
+    directives,
 })

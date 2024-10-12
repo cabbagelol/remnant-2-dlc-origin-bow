@@ -18,6 +18,8 @@ export interface BaseCalcItem {
     creationTime: string
     // 版本名称
     version: string
+    // 作者
+    author: string[]
 
     init({}): this
 

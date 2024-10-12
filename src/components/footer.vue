@@ -1,7 +1,7 @@
 <template>
   <v-divider/>
   <v-footer tile class="text-center">
-    <v-container class="footer pa-0">
+    <v-container max-width="1200" class="footer pa-0">
       <svg height="50" xmlns="http://www.w3.org/2000/svg" width="50">
         <g transform="scale(.4) translate(50, 12)">
           <path stroke="#000"
