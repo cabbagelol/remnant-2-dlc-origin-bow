@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {VNumberInput} from 'vuetify/labs/VNumberInput'
 
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, nextTick, onMounted, ref, watch} from "vue";
 import {RouletteType} from "@/data/RouletteType.ts";
 import {storeRouletteConfig} from "@/state";
 
@@ -20,11 +20,15 @@ let props = defineProps({
 })
 
 watch(() => props.value, (newValue) => {
-  n_value.value = newValue;
+  nextTick(() => {
+    n_value.value = newValue;
+  });
 })
 
 watch(() => n_value.value, () => {
-  onNotificationValue()
+  nextTick(() => {
+    onNotificationValue()
+  });
 })
 
 onMounted(() => {
@@ -52,7 +56,7 @@ function rem() {
 }
 
 function onNotificationValue() {
-  $emit('change', Number(n_value.value))
+  $emit('change', Number(n_value.value), props.type)
 }
 
 defineExpose({value})

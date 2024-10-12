@@ -16,18 +16,18 @@ export class CowaiiV1 implements BaseCalcItem {
         return this;
     }
 
-    public getInput(): string[] {
-        return this.getOffsetParameter(Date.now() / 1000).toString().split('')
+    public getInput(): number[] {
+        return this.getOffsetParameter(Date.now() / 1000).toString().split('').map(i => Number(i))
     }
 
-    public getExportation(): string[] {
-        return this.getOffsetParameter(Date.now() / 1000 + 3600).toString().split('')
+    public getExportation(): number[] {
+        return this.getOffsetParameter(Date.now() / 1000 + 3600).toString().split('').map(i => Number(i))
     }
 
     /**
      * 编译量
      * @param ts 时间戳
-     * @returns 
+     * @returns
      */
     private getOffsetParameter(ts: number): string {
         const seeds = {

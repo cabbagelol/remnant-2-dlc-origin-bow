@@ -6,15 +6,15 @@ export const storeRouletteConfig = defineStore('storeRouletteConfig', {
     state: () => {
         const typeData = storage.local.get('roulette.config');
         let type: RouletteType = RouletteType.Standard;
-        if (typeData.code == 0)
-            type = typeData.data.value;
+        if (typeData.code == 0 && typeData.data)
+            type = typeData.data.value || RouletteType.Standard;
 
         return {type}
     },
     actions: {
         onChangeConfig(value: RouletteType) {
-            storage.local.set('roulette.config', value)
             this.type = value;
+            storage.local.set('roulette.config', value)
         },
     },
 })

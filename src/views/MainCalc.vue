@@ -31,7 +31,7 @@ let // setting route.query.v ??
     inputValue = ref([0, 0, 0, 0]);
 
 onMounted(() => {
-  inputValue.value = algorithm.mode(useAlgorithm.value).get(useAlgorithmCalcVersion.value).getInput()
+  // inputValue.value = algorithm.mode(useAlgorithm.value).get(useAlgorithmCalcVersion.value).getInput()
 
   onUpdateTime()
 })
@@ -63,7 +63,7 @@ function onChangeCustomTime() {
 /**
  * 轮盘触发时间通知计算
  */
-function onRouletteChange() {
+function onRouletteChange(value: any, type: string) {
   for (let index = 0; index < algorithm.mode(useAlgorithm.value).get(useAlgorithmCalcVersion.value).config.inputMax; index++) {
     inputValue.value[index] = inputValueBoxView.value[index].value
   }

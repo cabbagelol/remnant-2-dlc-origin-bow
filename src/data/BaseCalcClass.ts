@@ -26,12 +26,12 @@ export interface BaseCalcItem {
     /**
      * 输入
      */
-    getInput(): any[]
+    getInput(): number[]
 
     /**
      * 输出
      */
-    getExportation(): string[];
+    getExportation(): number[];
 
-    getExportation(inputValue: number[], t?: Object): string[];
+    getExportation(inputValue: number[], t?: Object): number[];
 }

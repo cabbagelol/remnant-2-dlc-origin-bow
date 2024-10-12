@@ -25,14 +25,14 @@ export class SuqiqunV1 implements BaseCalcItem {
         return this;
     }
 
-    public getInput() {
+    public getInput(): number[] {
         return [5, 5, 5, 5]
     }
 
     /**
      * 计算
      */
-    public getExportation(inputValue: number[] = [0, 0, 0, 0]): string[] {
+    public getExportation(inputValue: number[] = [0, 0, 0, 0]): number[] {
         let input = inputValue.join(''),
             time = this.integralPointTime;
 
@@ -46,7 +46,7 @@ export class SuqiqunV1 implements BaseCalcItem {
             this.resultNumber.value = this.resultNumber.value.slice(1, 5);
 
         // 字符转数组
-        return this.resultNumber.value.toString().split('');
+        return this.resultNumber.value.toString().split('').map(i => Number(i));
     }
 
     /**
