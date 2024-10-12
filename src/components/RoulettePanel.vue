@@ -32,17 +32,17 @@ watch(() => n_value.value, () => {
 })
 
 onMounted(() => {
-  loadData();
+  nextTick(() => {
+    loadData();
 
-  $emit('reday', Number(n_value.value))
+    $emit('reday', Number(n_value.value))
+  });
 })
 
 async function loadData() {
-  n_value.value = props.value;
+  n_value.value = props.value || '0';
 
-  for (let i = 0; i < inputMax + 1; i++) {
-    numberAsImage.push(`/images/${i}.png`)
-  }
+  numberAsImage = Array.from({length: inputMax + 1}, (_: any, i) => `images/${i}.png`)
 }
 
 function add() {
@@ -71,7 +71,9 @@ defineExpose({value})
             <v-icon>mdi-minus</v-icon>
           </v-btn>
           <v-divider vertical></v-divider>
-          <v-img :src="numberAsImage[value]" :title="value" cover alt="value" class="img" width="45" height="70px"/>
+          <v-img :src="numberAsImage[value]" v-if="numberAsImage[value]" :title="value" cover
+               alt="value"
+               class="img" width="45" height="70px"/>
           <v-divider vertical></v-divider>
           <v-btn icon density="compact" @click="add" :disabled="props.type !== 'write' || value >= inputMax">
             <v-icon>mdi-plus</v-icon>

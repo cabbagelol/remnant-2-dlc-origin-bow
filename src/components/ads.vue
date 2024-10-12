@@ -4,7 +4,7 @@ import {defineComponent} from "vue";
 
 export default defineComponent({
   props: {
-    id: String
+    id: String | undefined
   },
   setup() {
     return {
@@ -36,7 +36,7 @@ export default defineComponent({
     </v-avatar>
 
     <Adsense
-        class="adsbygoogle"
+        v-if="id"
         :adStyle="d[id].style"
         :client="d[id]['ca-pub']"
         :slot="d[id]['slot']"

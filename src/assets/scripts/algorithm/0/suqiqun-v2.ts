@@ -11,6 +11,7 @@ export class SuqiqunV2 implements BaseCalcItem {
         inputMax: 4, isExportation: false, isInput: true,
         isCustomTime: true
     };
+    author: string[] = [];
 
     // private var
     nowIntegralPointTime = new Date().getHours();

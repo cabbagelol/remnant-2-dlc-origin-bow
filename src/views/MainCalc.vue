@@ -42,18 +42,29 @@ function onUpdateTime() {
   }, 1000)
 }
 
-function onChangeAlgorithm() {
+function onChangeAlgorithm(newAlgorithm: string) {
   if (!useAlgorithm.value && !useAlgorithmCalcVersion.value) return;
 
   router.push({
     path: "/",
     query: {
-      "a": useAlgorithm.value,
+      "a": newAlgorithm,
+      "v": useAlgorithmCalcVersion.value
     }
   })
 
   // 切换算法后初始默认版本
   // useAlgorithmCalcVersion.value = algorithm.mode(useAlgorithm.value).useDefaultVersion;
+}
+
+function onChangeAlgorithmVersion (newVersion) {
+  router.push({
+    path: "/",
+    query: {
+      "a": useAlgorithm.value,
+      "v": newVersion
+    }
+  })
 }
 
 function onChangeCustomTime() {
@@ -208,6 +219,7 @@ function onRouletteChange(value: any, type: string) {
             <v-select :items="algorithm.mode(useAlgorithm).versions"
                       color="primary"
                       variant="outlined"
+                      @update:model-value="onChangeAlgorithmVersion"
                       v-model="useAlgorithmCalcVersion">
               <template v-slot:item="{ props, item }">
                 <v-list-item v-bind="props"

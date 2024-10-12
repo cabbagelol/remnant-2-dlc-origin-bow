@@ -7,6 +7,7 @@ export class SuqiqunV1 implements BaseCalcItem {
     // base var
     creationTime: string = "2024年10月06日00:00:00";
     version: string = "v1";
+    author: string[] = [];
     config: BaseCalcConfig = {
         inputMax: 4, isExportation: false, isInput: true,
         isCustomTime: true

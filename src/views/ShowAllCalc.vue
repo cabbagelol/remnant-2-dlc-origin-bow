@@ -77,7 +77,7 @@ async function copyToClipboard(i, j) {
           <v-col :sm="12" :md="12" :lg="8" :xl="8" cols="12" class="position-relative">
             <v-row justify="center" justify-lg="end" class="mt-5 pr-5">
               <div class="overflow-x-auto overflow-y-hidden">
-                <v-row justify="center" align="stretch">
+                <v-row justify="center" >
                   <v-col v-for="(o, oIndex) in j.getInput()" :key="oIndex" cols="3">
                     <RouterView
                         @reday="(value: any) => setRMap(i,j,oIndex,value)"
