@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import {VNumberInput} from 'vuetify/labs/VNumberInput'
 
-import {computed, nextTick, onMounted, ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import {RouletteType} from "@/data/RouletteType.ts";
 import {storeRouletteConfig} from "@/state";
+import {roulette} from "@/assets/scripts";
 
 const store = storeRouletteConfig(),
     inputMin = 0,
@@ -11,11 +12,13 @@ const store = storeRouletteConfig(),
 
 let n_value = ref(0),
     value = computed(() => n_value.value),
+    imagesLoading = ref(false),
     numberAsImage: string[] = [],
     $emit = defineEmits(['change', 'ready']);
 
 let props = defineProps({
   type: String,
+  showStyle: RouletteType | String,
   value: Number | undefined,
 })
 
@@ -24,6 +27,7 @@ watch(() => props.value, (newValue) => {
 })
 
 onMounted(() => {
+  imagesLoading.value = true;
   loadData();
 
   $emit('ready', Number(n_value.value))
@@ -32,7 +36,8 @@ onMounted(() => {
 async function loadData() {
   n_value.value = props.value || '0';
 
-  numberAsImage = Array.from({length: inputMax + 1}, (_: any, i) => `images/${i}.png`)
+  numberAsImage = roulette.getCurrentRouletteStyle(inputMin, inputMax);
+  imagesLoading.value = false;
 }
 
 function add() {
@@ -56,7 +61,7 @@ defineExpose({value})
 
 <template>
   <div class="pb-4">
-    <template v-if="store.type == RouletteType.Standard">
+    <template v-if="props.showStyle ? props.showStyle == RouletteType.Standard : store.type == RouletteType.Standard">
       <v-card border elevation="0" class="roulette-col" :class="props.type !== 'write' ? 'y':'n'" width="88">
         <v-btn-group style="height: 70px;" variant="tonal" color="primary">
           <v-btn width="20" icon density="compact" @click="rem" :disabled="props.type !== 'write' || value <= inputMin">
@@ -64,8 +69,7 @@ defineExpose({value})
           </v-btn>
           <v-divider vertical></v-divider>
           <v-img :src="numberAsImage[value]" v-if="numberAsImage[value]" :title="value" cover
-               alt="value"
-               class="img" width="46" height="70px"/>
+                 alt="value" class="img" width="46" height="70px"/>
           <v-divider vertical></v-divider>
           <v-btn width="20" icon density="compact" @click="add" :disabled="props.type !== 'write' || value >= inputMax">
             <v-icon>mdi-plus</v-icon>
@@ -73,7 +77,7 @@ defineExpose({value})
         </v-btn-group>
       </v-card>
     </template>
-    <template v-if="store.type == RouletteType.Extend">
+    <template v-else-if="props.showStyle ? props.showStyle == RouletteType.Extend : store.type == RouletteType.Extend">
       <v-card border class="roulette-col" width="88">
         <v-img :src="numberAsImage[value]" :title="value" alt="value" class="img" width="45" height="70px"/>
         <v-divider vertical></v-divider>
@@ -101,7 +105,7 @@ defineExpose({value})
       </v-card>
     </template>
 
-    <div class="text-center mt-1">
+    <div class="text-center mt-1" v-if="!props.showStyle">
       <v-chip color="primary" density="compact" variant="tonal" border class="ml-auto mr-auto">{{ value }}</v-chip>
     </div>
   </div>
@@ -124,6 +128,5 @@ defineExpose({value})
   width: 40px;
   height: 70px;
   filter: grayscale(1);
-  mask: url("/public/images/0.png") no-repeat center center;
 }
 </style>

@@ -1,3 +1,5 @@
+import {AuthorItem, AuthorItemInfo} from "./AuthorItemInfo.ts";
+
 export interface BaseCalcConfig {
     // 最大轮盘值
     inputMax: number
@@ -19,7 +21,7 @@ export interface BaseCalcItem {
     // 版本名称
     version: string
     // 作者
-    author: string[]
+    author: AuthorItemInfo[]
 
     init({}): this
 

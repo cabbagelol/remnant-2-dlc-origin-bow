@@ -4,7 +4,17 @@ export class CowaiiV1 implements BaseCalcItem {
     // base var
     creationTime: string = "2024年10月01日20:16:19";
     version: string = "v1";
-    author: string[] = [];
+    author: [] = [
+        {
+            name: '搬运工',
+            sites: [
+                {
+                    name: 'Remnant2 Toolkit',
+                    src: 'https://www.remnant2toolkit.com/'
+                }
+            ]
+        }
+    ];
     config: BaseCalcConfig = {
         inputMax: 4, isExportation: false, isInput: false,
         isCustomTime: false

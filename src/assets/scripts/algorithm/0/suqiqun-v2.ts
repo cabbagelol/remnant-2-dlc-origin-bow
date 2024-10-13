@@ -11,7 +11,17 @@ export class SuqiqunV2 implements BaseCalcItem {
         inputMax: 4, isExportation: false, isInput: true,
         isCustomTime: true
     };
-    author: string[] = [];
+    author: string[] = [
+        {
+            name: '苏九川',
+            sites: [
+                {
+                    name: 'bilibili',
+                    src: 'https://www.bilibili.com/video/BV1gfx2egETJ'
+                }
+            ]
+        }
+    ];
 
     // private var
     nowIntegralPointTime = new Date().getHours();

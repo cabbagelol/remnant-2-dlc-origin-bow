@@ -71,7 +71,21 @@ async function copyToClipboard(i, j) {
             <p class="mb-3">
               <v-chip density="compact" variant="tonal">{{ j.creationTime }}</v-chip>
             </p>
+
             <q class="text-wrap">{{ AllCalcInfo[i.name].versions[j.version].describe }}</q>
+
+            <div class="mt-5">
+              <v-list-subheader>作者或搬运名单</v-list-subheader>
+              <div class="d-flex" v-for="(ae,aeIndex) in j.author" :key="aeIndex" v-if="j.author.length > 0">
+                {{ ae.name }}
+
+                <v-btn variant="flat" density="compact" class="d-flex ml-2" v-for="links in ae.sites" :key="links" :href="links.src">
+                  <v-icon>mdi-link</v-icon>
+                  {{ links.name }}
+                </v-btn>
+              </div>
+              <v-list-item v-else>暂无</v-list-item>
+            </div>
           </v-col>
 
           <v-col :sm="12" :md="12" :lg="8" :xl="8" cols="12" class="position-relative">
@@ -106,7 +120,9 @@ async function copyToClipboard(i, j) {
 
         <v-divider class="mt-4 mb-4 mr-n5 ml-n5"></v-divider>
         <v-card-actions>
-          <v-btn color="primary" variant="tonal" :to="{name: 'main', query: {a: i.name, v: j.version}}">使用此方案</v-btn>
+          <v-btn color="primary" variant="tonal" :to="{name: 'main', query: {a: i.name, v: j.version}}">使用此方案
+          </v-btn>
+          <v-spacer/>
           <v-btn v-tooltip="`复制地址到剪切板`" variant="tonal" class="ml-2" @click="copyToClipboard(i,j)">
             分享
             <v-icon class="ml-2">mdi-share</v-icon>

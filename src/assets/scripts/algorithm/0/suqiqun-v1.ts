@@ -2,12 +2,23 @@ import {ref} from "vue";
 import {BaseCalcConfig, BaseCalcItem} from "../../../../data/BaseCalcClass.ts"
 
 import dictionariesV1 from '../../../../../public/v1-code-book.json';
+import {AuthorItem, AuthorItemInfo} from "../../../../data/AuthorItemInfo.ts";
 
 export class SuqiqunV1 implements BaseCalcItem {
     // base var
-    creationTime: string = "2024年10月06日00:00:00";
+    creationTime: string = "2024年09月29日00:00:00";
     version: string = "v1";
-    author: string[] = [];
+    author: AuthorItemInfo[] = [
+        {
+            name: '苏九川',
+            sites: [
+                {
+                    name: 'bilibili',
+                    src: 'https://www.bilibili.com/video/BV1gfx2egETJ'
+                }
+            ]
+        }
+    ];
     config: BaseCalcConfig = {
         inputMax: 4, isExportation: false, isInput: true,
         isCustomTime: true

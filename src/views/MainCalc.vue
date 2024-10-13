@@ -11,11 +11,7 @@ import {RouletteType} from "@/data/RouletteType.ts";
 
 const store = storeRouletteConfig(),
     route = useRoute(),
-    router = useRouter(),
-    AllStyleConfig = {
-      'Standard': '样式一',
-      'Extend': '样式二'
-    };
+    router = useRouter();
 
 let // setting route.query.v ??
     algorithms = algorithm.all,
@@ -31,8 +27,6 @@ let // setting route.query.v ??
     inputValue = ref([0, 0, 0, 0]);
 
 onMounted(() => {
-  // inputValue.value = algorithm.mode(useAlgorithm.value).get(useAlgorithmCalcVersion.value).getInput()
-
   onUpdateTime()
 })
 
@@ -57,7 +51,7 @@ function onChangeAlgorithm(newAlgorithm: string) {
   // useAlgorithmCalcVersion.value = algorithm.mode(useAlgorithm.value).useDefaultVersion;
 }
 
-function onChangeAlgorithmVersion(newVersion) {
+function onChangeAlgorithmVersion(newVersion: any) {
   router.push({
     path: "/",
     query: {
@@ -74,7 +68,7 @@ function onChangeCustomTime() {
 /**
  * 轮盘触发时间通知计算
  */
-function onRouletteChange(value: any, type: string) {
+function onRouletteChange() {
   for (let index = 0; index < algorithm.mode(useAlgorithm.value).get(useAlgorithmCalcVersion.value).config.inputMax; index++) {
     inputValue.value[index] = inputValueBoxView.value[index].value
   }
@@ -87,40 +81,14 @@ function onRouletteChange(value: any, type: string) {
       <v-col :sm="12" :md="12" :lg="5" :xl="5">
         <v-row>
           <v-spacer/>
-          <v-menu>
-            <template v-slot:activator="{ props }">
-              <v-btn
-                  icon
-                  class="mr-5"
-                  density="comfortable"
-                  variant="plain"
-                  color="primary"
-                  v-bind="props">
-                <v-icon>mdi-dots-horizontal</v-icon>
-              </v-btn>
-            </template>
-            <v-list @update:selected="store.onChangeConfig">
-              <v-list-item
-                  v-for="(item, index) in Object.values(RouletteType)"
-                  :key="index"
-                  :class="[
-                      store.type == item ? 'bg-primary' : ''
-                  ]"
-                  :value="item">
-
-                <v-list-item-title>
-                  <v-row>
-                    <v-col>
-                      {{ AllStyleConfig[item] }}
-                    </v-col>
-                    <v-col>
-                      <v-icon v-if="item == store.type" class="ml-4">mdi-check</v-icon>
-                    </v-col>
-                  </v-row>
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
+          <v-btn icon
+                 class="mr-5"
+                 density="comfortable"
+                 variant="plain"
+                 color="primary"
+                 to="/setting">
+            <v-icon>mdi-cog</v-icon>
+          </v-btn>
         </v-row>
 
         <template v-if="useAlgorithm && algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion)">
