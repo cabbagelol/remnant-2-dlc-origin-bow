@@ -76,7 +76,7 @@ async function copyToClipboard(i, j) {
 
             <div class="mt-5">
               <v-list-subheader>作者或搬运名单</v-list-subheader>
-              <div class="d-flex" v-for="(ae,aeIndex) in j.author" :key="aeIndex" v-if="j.author.length > 0">
+              <div class="d-flex text-no-wrap overflow-hidden" v-for="(ae,aeIndex) in j.author" :key="aeIndex" v-if="j.author.length > 0">
                 {{ ae.name }}
 
                 <v-btn variant="flat" density="compact" class="d-flex ml-2" v-for="links in ae.sites" :key="links" :href="links.src">

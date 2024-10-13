@@ -1,20 +1,24 @@
 <script setup lang="ts">
 import RoulettePanel from "@/components/RoulettePanel.vue"
 import AdsView from "@/components/ads.vue"
-import AllCalcInfo from "/public/calcVersion.json";
+import AllCalcInfoData from "/public/calcVersion.json";
 
 import {onMounted, Ref, ref} from "vue";
 import {algorithm} from "@/assets/scripts";
 import {useRoute, useRouter} from "vue-router";
-import {storeRouletteConfig} from "@/state";
-import {RouletteType} from "@/data/RouletteType.ts";
 
-const store = storeRouletteConfig(),
-    route = useRoute(),
-    router = useRouter();
+interface AllCalcInfoJson {
+  title: string
+  author: []
+  describe: string
+  versions: []
+}
 
-let // setting route.query.v ??
-    algorithms = algorithm.all,
+const route = useRoute(),
+    router = useRouter(),
+    AllCalcInfo: AllCalcInfoJson = AllCalcInfoData;
+
+let algorithms = algorithm.all,
     useAlgorithm = ref(route.query.a || algorithm.default),
     useAlgorithmCalcVersion = ref(route.query.v || 'v1'),
     useSystemNowIntegralPointTime = ref(true),
@@ -163,7 +167,8 @@ function onRouletteChange() {
             </v-select>
 
             <p class="text-subtitle-2 opacity-40" v-if="useAlgorithm">
-              {{ AllCalcInfo[useAlgorithm].describe ??= 'none' }}</p>
+              {{ AllCalcInfo[useAlgorithm].describe ??= 'none' }}
+            </p>
           </v-col>
           <v-col :sm="12" :md="6" :lg="6" :xl="6" :cols="12" v-if="useAlgorithm">
             <v-label class="mb-3 w-100">
@@ -198,8 +203,8 @@ function onRouletteChange() {
             </v-select>
 
             <p class="text-subtitle-2 opacity-40"
-               v-if="useAlgorithm && useAlgorithmCalcVersion && AllCalcInfo[useAlgorithm].verisons">
-              {{ AllCalcInfo[useAlgorithm].versions[useAlgorithmCalcVersion].describe ??= 'none' }}
+               v-if="useAlgorithm && useAlgorithmCalcVersion && Object.keys(AllCalcInfo[useAlgorithm].versions ?? {}).indexOf(useAlgorithmCalcVersion) >= 0">
+              {{ AllCalcInfo[useAlgorithm].versions[useAlgorithmCalcVersion].describe }}
             </p>
           </v-col>
           <v-col :sm="12" :md="6" :lg="6" :xl="6" :cols="12"
@@ -221,7 +226,7 @@ function onRouletteChange() {
                        width="80px"
                        :value="false"
                        :disabled="!algorithm.mode(useAlgorithm).get(useAlgorithmCalcVersion).config.isCustomTime">
-                  <v-select :items="Array.from({length: 24}, (e,i) => i)"
+                  <v-select :items="Array.from({length: 24}, (_,i) => i)"
                             v-model="useCustomIntegralPointTime"
                             @update:focused="onChangeCustomTime"
                             variant="filled"
