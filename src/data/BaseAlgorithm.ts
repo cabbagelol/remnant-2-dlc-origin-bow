@@ -1,5 +1,4 @@
 import {BaseCalcItem} from "./BaseCalcClass"
-import {Ref} from "vue";
 
 export interface BaseAlgorithm {
     // 算法名称

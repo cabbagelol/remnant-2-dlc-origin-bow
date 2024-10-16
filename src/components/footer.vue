@@ -1,5 +1,5 @@
 <template>
-  <v-divider/>
+  <v-divider class="mt-10"/>
   <v-footer tile class="text-center">
     <v-container max-width="1200" class="footer pa-0">
       <svg height="50" xmlns="http://www.w3.org/2000/svg" width="50">

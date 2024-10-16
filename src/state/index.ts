@@ -8,7 +8,7 @@ export const storeRouletteConfig = defineStore('storeRouletteConfig', {
             imageStyleData = storage.local.get('roulette.config.imageStyle');
 
         let type: RouletteType = RouletteType.Standard,
-            image: 'Standard';
+            image = 'Standard';
 
         if (typeData.code == 0 && typeData.data)
             type = typeData.data.value || RouletteType.Standard;
@@ -23,7 +23,7 @@ export const storeRouletteConfig = defineStore('storeRouletteConfig', {
             this.type = value;
             storage.local.set('roulette.config.btnType', value)
         },
-        onChangeImageStyle(value) {
+        onChangeImageStyle(value: string) {
             this.imageStyle = value;
             storage.local.set('roulette.config.imageStyle', value)
         }

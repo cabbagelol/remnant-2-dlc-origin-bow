@@ -1,4 +1,4 @@
-import {AuthorItem, AuthorItemInfo} from "./AuthorItemInfo.ts";
+import {AuthorItemInfo} from "./AuthorItemInfo.ts";
 
 export interface BaseCalcConfig {
     // 最大轮盘值

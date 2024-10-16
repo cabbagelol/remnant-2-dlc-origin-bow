@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {VNumberInput} from 'vuetify/labs/VNumberInput'
 
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, onMounted, Ref, ref, watch} from "vue";
 import {RouletteType} from "@/data/RouletteType.ts";
 import {storeRouletteConfig} from "@/state";
 import {roulette} from "@/assets/scripts";
@@ -16,14 +16,14 @@ let n_value = ref(0),
     numberAsImage: string[] = [],
     $emit = defineEmits(['change', 'ready']);
 
-let props = defineProps({
-  type: String,
-  showStyle: RouletteType | String,
-  value: Number | undefined,
-})
+let props = defineProps<{
+  type: string
+  showStyle?: any
+  value: Number | undefined
+}>()
 
 watch(() => props.value, (newValue) => {
-  n_value.value = newValue;
+  n_value.value = Number(newValue);
 })
 
 onMounted(() => {
@@ -34,7 +34,7 @@ onMounted(() => {
 })
 
 async function loadData() {
-  n_value.value = props.value || '0';
+  n_value.value = Number(props.value || '0');
 
   numberAsImage = roulette.getCurrentRouletteStyle(inputMin, inputMax);
   imagesLoading.value = false;
@@ -56,7 +56,9 @@ function onNotificationValue() {
   $emit('change', Number(n_value.value), props.type)
 }
 
-defineExpose({value})
+defineExpose<{
+  value: Ref<number> | Ref<string>
+}>({value})
 </script>
 
 <template>
@@ -118,10 +120,6 @@ defineExpose({value})
   display: inline-flex;
   margin: 0 5px;
   border-radius: 5px;
-}
-
-.roulette-col.n {
-  background: -moz-visitedhyperlinktext;
 }
 
 .roulette-col .img {
